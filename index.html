@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thomas | Portfolio</title>
+    <!-- Geist Mono Font Fallback / CDN if available or standard mono -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-bg font-mono overflow-hidden">
+    <div id="app"></div>
+    <!-- CRT Distortion Filter -->
+    <svg style="display: none">
+      <defs>
+        <filter
+          id="crt-bulge"
+          x="0"
+          y="0"
+          width="1"
+          height="1"
+          primitiveUnits="objectBoundingBox"
+        >
+          <feImage
+            href="/lens-map.bmp"
+            result="map"
+            width="1"
+            height="1"
+            preserveAspectRatio="none"
+          />
+          <feDisplacementMap
+            in="SourceGraphic"
+            in2="map"
+            scale="0.1"
+            xChannelSelector="R"
+            yChannelSelector="G"
+          />
+        </filter>
+      </defs>
+    </svg>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
