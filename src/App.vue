@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted, nextTick, watch } from "vue";
 import BootScreen from "./components/BootScreen.vue";
+import FullscreenHint from "./components/FullscreenHint.vue";
 import pcStartupSound from "./assets/old-pc-startup.mp3";
 
 const terminalLines = ref([]);
@@ -8,13 +9,15 @@ const isOff = ref(true);
 const isBooting = ref(true);
 const hasPoweredOn = ref(false);
 const isMobile = ref(false);
+const showFullscreenHint = ref(true);
 const currentInput = ref("");
 const inputRef = ref(null);
 const containerRef = ref(null);
 const commandHistory = ref([]);
 const historyIndex = ref(-1);
 const uptime = ref("00d 00h 00m 00s");
-const systemStartTime = ref(new Date(2026, 3, 28, 12, 0, 0).getTime());
+const systemStartTime = ref(new Date(2020, 8, 28, 12, 0, 0).getTime());
+const activeHelp = ref(null);
 
 const navigateHistory = (direction) => {
   if (commandHistory.value.length === 0) return;
@@ -48,7 +51,7 @@ const updateUptime = () => {
   const minutes = Math.floor((diff / (1000 * 60)) % 60);
   const seconds = Math.floor((diff / 1000) % 60);
 
-  uptime.value = `${days}d ${hours.toString().padStart(2, "0")}h ${minutes
+  uptime.value = `${days}j ${hours.toString().padStart(2, "0")}h ${minutes
     .toString()
     .padStart(2, "0")}m ${seconds.toString().padStart(2, "0")}s`;
 };
@@ -76,6 +79,7 @@ onUnmounted(() => {
 });
 
 const handlePowerOn = () => {
+  showFullscreenHint.value = false;
   isOff.value = false;
   hasPoweredOn.value = true;
   const audio = new Audio(pcStartupSound);
@@ -90,50 +94,48 @@ const commands = {
       {
         type: "text",
         content:
-          "Je suis un jeune développeur web passionné par les interfaces minimalistes et les expériences utilisateur immersives.",
+          "Développeur Fullstack / App Engineer avec 5 ans d'expérience, passionné par la création de solutions techniques innovantes et l'optimisation de processus.",
       },
       {
         type: "text",
         content:
-          "Spécialisé en Vue.js et Tailwind CSS, j'aime construire des outils qui semblent vivants.",
+          "Spécialisé en JavaScript (Vue, React, Node), je conçois des architectures robustes et implémente des automatisations stratégiques (n8n, Make).",
       },
       {
         type: "text",
-        content: "Basé en France, disponible pour de nouveaux projets.",
+        content: "Basé à Toulouse, engagé à livrer un code propre et scalable.",
       },
     ];
   },
   projets: () => {
     return [
       { type: "header", content: "// projets sélectionnés" },
+      { type: "project-header" },
       {
         type: "project",
-        name: "ZUI_OS",
+        name: "BedBoat",
         year: "2026",
-        stack: "Vue 3 / Tailwind",
+        stack: "Vue.js / Node.js / PostgreSQL",
         status: "EN LIGNE",
       },
       {
         type: "project",
-        name: "Neural-Sync",
-        year: "2025",
-        stack: "React / Three.js",
+        name: "Orthophonie",
+        year: "2021",
+        stack: "React / Tailwind CSS",
         status: "PUBLIÉ",
       },
       {
         type: "project",
-        name: "Vibe-Check",
-        year: "2024",
-        stack: "Next.js / Supabase",
-        status: "EN COURS",
+        name: "Thomas_OS",
+        year: "2026",
+        stack: "Vue 3 / Tailwind CSS v4",
+        status: "CE PROJET",
       },
       {
         type: "text",
-        content: "",
-      },
-      {
-        type: "text",
-        content: 'Utilisez "ouvrir <nom>" pour explorer un projet spécifique.',
+        content:
+          'Utilisez "ouvrir <nom>" pour explorer un projet spécifique ou bien cliquez simplement dessus.',
       },
     ];
   },
@@ -144,43 +146,43 @@ const commands = {
 
     const projectName = args[0].toLowerCase();
     const projectDetails = {
-      zui_os: {
+      bedboat: {
+        name: "BedBoat Platform",
         description:
-          "Un système d'exploitation fictif pour portfolio, explorant les interfaces rétro-futuristes et la navigation textuelle.",
-        url: "https://zui.ooo",
-        tech: ["Vue 3", "Vite", "Tailwind CSS v4"],
+          "Une plateforme SaaS complète pour la gestion de réservations de bateaux. J'ai piloté l'audit technique et la restructuration globale de l'architecture pour supporter une montée en charge importante.",
+        url: "https://bedboat.fr",
+        tech: ["Vue.js", "Node.js", "PostgreSQL", "Stripe", "Make", "Agile"],
+        status: "EN PRODUCTION",
+        role: "Fullstack Architect",
       },
-      "neural-sync": {
+      orthophonie: {
+        name: "Assistance Orthophonique",
         description:
-          "Plateforme de visualisation de données neuronales en temps réel utilisant Three.js pour le rendu 3D.",
+          "Outil thérapeutique innovant basé sur la sémiophonie. L'application permet aux praticiens de créer des exercices personnalisés et de suivre la progression clinique des patients en temps réel.",
         url: "#",
-        tech: ["React", "Three.js", "Web Workers"],
+        tech: ["React", "Tailwind CSS", "Vite", "Web Audio API"],
+        status: "DÉPLOYÉ",
+        role: "Frontend Developer",
       },
-      "vibe-check": {
+      thomas_os: {
+        name: "Thomas_OS Portfolio",
         description:
-          "Outil d'analyse de sentiment social pour les communautés en ligne. Actuellement en phase de test alpha.",
-        url: "#",
-        tech: ["Next.js", "Supabase", "OpenAI API"],
+          "Une expérience immersive simulant un système d'exploitation rétro-futuriste. Ce projet explore les limites des interfaces textuelles modernes avec Vue 3 et Tailwind CSS v4.",
+        url: "https://github.com/lythomm/terminal-portfolio",
+        tech: ["Vue 3", "Vite", "Tailwind CSS v4", "Framer Motion"],
+        status: "VERSION 1.0.0",
+        role: "Lead Developer / Designer",
       },
     };
 
     if (projectName in projectDetails) {
       const p = projectDetails[projectName];
-      const result = [
-        { type: "header", content: `// projet: ${projectName.toUpperCase()}` },
-        { type: "text", content: p.description },
-        { type: "text", content: `STACK: ${p.tech.join(", ")}` },
+      return [
+        {
+          type: "project-detail",
+          ...p,
+        },
       ];
-
-      if (p.url !== "#") {
-        window.open(p.url, "_blank");
-        result.push({
-          type: "accent",
-          content: `URL: ${p.url} (Ouvert dans un nouvel onglet)`,
-        });
-      }
-
-      return result;
     } else {
       return [
         { type: "error", content: `ERR: Projet '${projectName}' introuvable.` },
@@ -189,58 +191,158 @@ const commands = {
   },
   parcours: () => {
     return [
-      { type: "header", content: "// parcours" },
+      { type: "header", content: "// expérience professionnelle" },
       {
         type: "experience",
-        role: "Développeur Freelance",
-        company: "Indépendant",
-        period: "2025 - Présent",
+        role: "Développeur Fullstack (alternance -> CDI)",
+        company: "BedBoat",
+        url: "https://bedboat.fr/",
+        period: "2022 - 2026",
+      },
+      {
+        type: "desc",
+        content:
+          "Audit technique de l'existant et restructuration de la plateforme pour améliorer la performance, la scalabilité et la maintenance du code",
+      },
+      {
+        type: "desc",
+        content:
+          "Introduction de la culture Agile au sein de l'équipe, mise en place de rituels (Sprints, Daily, Retrospectives) là où aucun cadre n'existait",
+      },
+      {
+        type: "desc",
+        content:
+          "Développement du système de réservation et intégration du système de paiement Stripe",
+      },
+      {
+        type: "desc",
+        content: "Optimisation des processus internes via automatisations Make",
+      },
+      { type: "text", content: "" },
+      {
+        type: "experience",
+        role: "Développeur Fullstack (alternance)",
+        company: "iologo",
+        url: "https://www.iologo.io/",
+        period: "2021 - 2022",
+      },
+      {
+        type: "desc",
+        content:
+          "Implémentation de fonctionnalités de bout en bout, de l’interface utilisateur à la logique métier et l'API",
+      },
+      {
+        type: "desc",
+        content:
+          "Participation active à la transition technique et à l'unification des outils suite à la fusion avec Lexidia",
+      },
+      {
+        type: "desc",
+        content:
+          "Création d'un back-office permettant aux équipes non-techniques (support, marketing) de gérer et d'éditer les données de la base en toute autonomie et sécurité",
+      },
+      { type: "text", content: "" },
+      {
+        type: "experience",
+        role: "Développeur Frontend (alternance)",
+        company: "Lexidia",
+        url: "https://www.lexidia.org/",
+        period: "2020 - 2021",
+      },
+      {
+        type: "desc",
+        content:
+          "Conception de l'interface utilisateur pour une application d'aide à l'orthophonie basée sur la sémiophonie",
+      },
+      {
+        type: "desc",
+        content:
+          "Travail en lien étroit avec les professionnels de santé pour traduire leurs besoins cliniques en solutions techniques concrètes",
+      },
+
+      { type: "header", content: "// éducation" },
+      {
+        type: "experience",
+        role: "Ingénieur spécialité AISL",
+        company: "IPST-CNAM (Toulouse)",
+        period: "2021 - 2023",
       },
       {
         type: "experience",
-        role: "Développeur Web Junior",
-        company: "Creative Lab",
-        period: "2024 - 2025",
+        role: "Licence Informatique",
+        company: "IPST-CNAM (Toulouse)",
+        period: "2020 - 2021",
       },
       {
         type: "experience",
-        role: "Stagiaire Développeur Web",
-        company: "Tech Startup",
-        period: "2023 - 2024",
+        role: "DUT Informatique",
+        company: "IUT Informatique Paul Sabatier (Toulouse)",
+        period: "2018 - 2020",
+      },
+    ];
+  },
+  competences: () => {
+    return [
+      { type: "header", content: "// compétences techniques" },
+      {
+        type: "text",
+        content: "Frontend: Vue.js, React.js, Tailwind CSS, JS (ES6+), Figma",
+      },
+      {
+        type: "text",
+        content: "Backend: Node.js, Express.js, PostgreSQL, Supabase",
+      },
+      {
+        type: "text",
+        content: "Automation: n8n, Make, Workflows d'automatisation",
+      },
+      {
+        type: "text",
+        content: "Outils: Git, Docker, GCP, Vercel, Heroku",
+      },
+      {
+        type: "text",
+        content: "IA: Prompt Engineering, Agents AI, Gemini/Claude APIs",
       },
     ];
   },
   contact: () => {
     return [
       { type: "header", content: "// me contacter" },
-      { type: "text", content: "Email: contact@thomas.dev" },
-      { type: "text", content: "GitHub: @thomas_dev" },
-      { type: "text", content: "Twitter: @thomas_dev" },
+      { type: "text", content: "Email: lythomm@gmail.com" },
+      { type: "text", content: "LinkedIn: linkedin.com/in/thomas-ly" },
+      { type: "text", content: "GitHub: github.com/lythomm" },
+      { type: "text", content: "Portfolio: thomas-ly.vercel.app" },
     ];
-  },
-
-  historique: () => {
-    return commandHistory.value.map((cmd, i) => ({
-      type: "text",
-      content: `${i + 1}  ${cmd}`,
-    }));
   },
 
   aide: () => {
     return [
-      { type: "header", content: "// commandes disponibles" },
-      { type: "text", content: "a-propos     - En savoir plus sur moi" },
-      { type: "text", content: "projets      - Liste de mes réalisations" },
-      { type: "text", content: "ouvrir <nom> - Détails sur un projet" },
-      { type: "text", content: "parcours     - Mon parcours professionnel" },
-      { type: "text", content: "contact      - Mes réseaux et email" },
-      { type: "text", content: "historique   - Historique des commandes" },
-      { type: "text", content: "effacer      - Effacer le terminal" },
-      { type: "text", content: "aide         - Afficher cette aide" },
+      {
+        type: "text",
+        content: "commandes disponibles :",
+        class: "dim-text term-small mb-3",
+      },
+      { type: "command", name: "a-propos", desc: "en savoir plus sur moi" },
+      { type: "command", name: "projets", desc: "liste de mes réalisations" },
+      { type: "command", name: "ouvrir <nom>", desc: "détails sur un projet" },
+      { type: "command", name: "parcours", desc: "mon parcours professionnel" },
+      {
+        type: "command",
+        name: "competences",
+        desc: "mes compétences techniques",
+      },
+      {
+        type: "command",
+        name: "contact",
+        desc: "me contacter (email, réseaux)",
+      },
+      { type: "command", name: "effacer", desc: "effacer le terminal" },
     ];
   },
   effacer: () => {
     terminalLines.value = [];
+    activeHelp.value = null;
     return [];
   },
 };
@@ -282,14 +384,22 @@ const addLineWithTyping = async (line) => {
   }
 };
 
-const handleCommand = () => {
-  const fullInput = currentInput.value.trim();
-  if (fullInput === "") return;
+const runCommand = (fullInput) => {
+  const input = fullInput.trim();
+  if (input === "") return;
 
-  const [cmd, ...args] = fullInput.toLowerCase().split(/\s+/);
+  const [cmd, ...args] = input.toLowerCase().split(/\s+/);
 
-  terminalLines.value.push({ type: "prompt", content: currentInput.value });
-  commandHistory.value.push(fullInput);
+  terminalLines.value.push({ type: "prompt", content: input });
+  commandHistory.value.push(input);
+
+  if (cmd === "aide") {
+    activeHelp.value = commands.aide();
+    return;
+  }
+
+  // Clear help for any other command
+  activeHelp.value = null;
 
   if (cmd in commands) {
     const result = commands[cmd](args);
@@ -302,12 +412,15 @@ const handleCommand = () => {
       content: `ERR: Commande '${cmd}' non reconnue. Essayez 'aide'.`,
     });
   }
+};
 
+const handleCommand = () => {
+  runCommand(currentInput.value);
   currentInput.value = "";
 };
 
 const focusInput = () => {
-  inputRef.value?.focus();
+  inputRef.value?.focus({ preventScroll: true });
 };
 
 const scrollToBottom = async () => {
@@ -365,6 +478,12 @@ watch(terminalLines, scrollToBottom, { deep: true });
       v-if="isOff"
       class="absolute inset-0 z-50 flex flex-col items-center justify-center space-y-8 bg-bg"
     >
+      <!-- Fullscreen Hint Modal -->
+      <FullscreenHint
+        :show="showFullscreenHint"
+        @close="showFullscreenHint = false"
+      />
+
       <button
         @click="handlePowerOn"
         class="group relative flex items-center justify-center w-24 h-24 rounded-full border-2 border-dim hover:border-accent transition-all duration-300 active:scale-95 cursor-pointer"
@@ -391,7 +510,7 @@ watch(terminalLines, scrollToBottom, { deep: true });
       <!-- Top Banner -->
       <div v-if="!isBooting" class="sticky top-0 z-40 pb-5 pt-2">
         <div
-          class="max-w-[1100px] mx-auto w-full flex justify-between items-start font-mono text-[12px] tracking-widest"
+          class="container-max flex justify-between items-start font-mono term-label tracking-widest"
         >
           <div class="space-y-1.5">
             <div class="flex items-center space-x-3">
@@ -435,102 +554,255 @@ watch(terminalLines, scrollToBottom, { deep: true });
           </div>
         </div>
         <!-- Separator -->
-        <div class="max-w-[1100px] mx-auto w-full px-4 mt-6">
+        <div class="container-max px-4 mt-6">
           <div
             class="h-px w-full bg-linear-to-r from-transparent via-border to-transparent"
           ></div>
         </div>
       </div>
 
+      <!-- Main Terminal Content -->
+      <BootScreen v-if="isBooting" @complete="onBootComplete" />
+
       <div
-        class="terminal-content flex-grow overflow-y-auto"
+        v-if="!isBooting"
         ref="containerRef"
+        class="terminal-content container-max px-4"
       >
-        <div class="max-w-[1100px] mx-auto w-full">
-          <!-- Boot Sequence -->
-          <BootScreen v-if="isBooting" @complete="onBootComplete" />
-
-          <!-- Terminal Output -->
+        <div
+          v-for="(line, index) in terminalLines"
+          :key="index"
+          class="mb-4 last:mb-0"
+        >
+          <!-- Prompt -->
           <div
-            v-else
-            v-for="(line, index) in terminalLines"
-            :key="index"
-            class="mb-1"
+            v-if="line.type === 'prompt'"
+            class="flex items-center term-main mb-4"
           >
-            <!-- Prompt Line -->
-            <div v-if="line.type === 'prompt'" class="flex">
-              <span class="accent-text mr-2">thomas-portfolio:~$</span>
-              <span>{{ line.content }}</span>
+            <span class="accent-text mr-2">thomas-portfolio:~$</span>
+            <span class="text-fg">{{ line.content }}</span>
+          </div>
+
+          <!-- Header -->
+          <div
+            v-else-if="line.type === 'header'"
+            class="accent-text term-main uppercase tracking-widest mb-4 mt-8 first:mt-0"
+          >
+            {{ line.content }}
+          </div>
+
+          <!-- ASCII -->
+          <pre
+            v-else-if="line.type === 'ascii'"
+            class="accent-text text-xs leading-none font-mono opacity-80 overflow-x-hidden! ascii-art"
+          >
+            {{ line.content }}
+          </pre>
+
+          <!-- Error -->
+          <div v-else-if="line.type === 'error'" class="text-err term-main">
+            {{ line.content }}
+          </div>
+
+          <!-- Project Header -->
+          <div
+            v-else-if="line.type === 'project-header'"
+            class="grid grid-cols-[1fr_80px_1.5fr_100px] gap-4 mb-4 border-b border-border/30 pb-2 px-4"
+          >
+            <div class="flex items-center space-x-3">
+              <span class="w-4"></span>
+              <div class="dim-text text-xs uppercase tracking-widest">Nom</div>
             </div>
-
-            <!-- ASCII Art -->
-            <pre
-              v-else-if="line.type === 'ascii'"
-              class="accent-text text-[5px] md:text-[10.5px] leading-[1.12] overflow-x-auto"
-              >{{ line.content }}</pre
-            >
-
-            <!-- Header -->
-            <div
-              v-else-if="line.type === 'header'"
-              class="mt-4 mb-2 pb-1 border-b border-border dim-text text-[11px] uppercase tracking-[0.12em]"
-            >
-              {{ line.content }}
+            <div class="dim-text text-xs uppercase tracking-widest">Date</div>
+            <div class="dim-text text-xs uppercase tracking-widest text-center">
+              Stack techniques
             </div>
-
-            <!-- Project Grid -->
-            <div
-              v-else-if="line.type === 'project'"
-              class="grid grid-cols-[1fr_80px_150px_80px] gap-2 py-1 items-center hover:bg-surface px-1"
-            >
-              <span class="accent-text">{{ line.name }}</span>
-              <span class="dim-text text-[13px]">{{ line.year }}</span>
-              <span class="dim-text text-[13px]">{{ line.stack }}</span>
-              <span
-                :class="[
-                  'text-[10px] px-2 py-0.5 border text-center',
-                  ['EN LIGNE', 'PUBLIÉ'].includes(line.status)
-                    ? 'text-accent border-accent-border'
-                    : 'text-orange border-orange/40',
-                ]"
-              >
-                {{ line.status }}
-              </span>
-            </div>
-
-            <!-- Experience Row -->
-            <div
-              v-else-if="line.type === 'experience'"
-              class="flex justify-between items-center py-1"
-            >
-              <div>
-                <span class="text-fg">{{ line.role }}</span>
-                <span class="dim-text mx-2">@</span>
-                <span class="accent-text">{{ line.company }}</span>
-              </div>
-              <span class="dim-text text-[13px]">{{ line.period }}</span>
-            </div>
-
-            <!-- Error Text -->
-            <div v-else-if="line.type === 'error'" class="text-err">
-              {{ line.content }}
-            </div>
-
-            <!-- Simple Text -->
-            <div v-else class="text-fg">
-              {{ line.content }}
+            <div class="dim-text text-xs uppercase tracking-widest text-right">
+              Statut
             </div>
           </div>
 
+          <!-- Project Item -->
+          <div
+            v-else-if="line.type === 'project'"
+            class="group relative py-2.5 px-4 hover:bg-accent/5 transition-colors cursor-pointer border border-transparent hover:border-accent/10"
+            @click="runCommand('ouvrir ' + line.name)"
+          >
+            <div
+              class="grid grid-cols-[1fr_80px_1.5fr_100px] gap-4 items-center"
+            >
+              <div class="flex items-center space-x-3">
+                <span
+                  class="text-accent opacity-0 group-hover:opacity-100 transition-opacity w-4"
+                  >→</span
+                >
+                <span class="text-fg font-bold term-main">{{ line.name }}</span>
+              </div>
+              <div class="dim-text term-secondary tabular-nums">
+                {{ line.year }}
+              </div>
+              <div class="text-fg/80 term-small text-center truncate px-2">
+                {{ line.stack }}
+              </div>
+              <div class="text-right">
+                <span
+                  class="text-[10px] px-2 py-0.5 border border-accent/30 text-accent bg-accent/5 tracking-wider font-bold"
+                  >{{ line.status }}</span
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Experience -->
+          <div
+            v-else-if="line.type === 'experience'"
+            class="flex flex-col space-y-1 mb-2"
+          >
+            <div class="flex justify-between items-start">
+              <div class="flex items-center space-x-2">
+                <span class="text-fg font-bold term-main">{{ line.role }}</span>
+                <span class="dim-text">@</span>
+                <a
+                  v-if="line.url"
+                  :href="line.url"
+                  target="_blank"
+                  class="accent-text hover:underline underline-offset-4 decoration-accent/30"
+                  >{{ line.company }}</a
+                >
+                <span v-else class="accent-text">{{ line.company }}</span>
+              </div>
+              <span class="dim-text term-secondary tabular-nums">{{
+                line.period
+              }}</span>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div
+            v-else-if="line.type === 'desc'"
+            class="dim-text term-secondary pl-4 border-l-2 border-border ml-1 mb-4 leading-relaxed max-w-2xl"
+          >
+            {{ line.content }}
+          </div>
+
+          <!-- Text -->
+          <div
+            v-else-if="line.type === 'text'"
+            :class="[line.class || 'text-fg/90 term-main leading-relaxed']"
+          >
+            {{ line.content }}
+          </div>
+
+          <!-- Project Detail -->
+          <div
+            v-else-if="line.type === 'project-detail'"
+            class="mt-4 border border-border/40 bg-surface/30 p-8 space-y-8 backdrop-blur-xs relative overflow-hidden"
+          >
+            <!-- Corner decoration -->
+            <div
+              class="absolute top-0 right-0 w-16 h-16 border-t border-r border-accent/20"
+            ></div>
+
+            <div
+              class="flex justify-between items-center border-b border-border/50 pb-6 mb-8"
+            >
+              <div class="flex items-center space-x-3">
+                <span class="dim-text text-[10px] tracking-widest uppercase"
+                  >Projet:</span
+                >
+                <h2
+                  class="text-3xl font-bold accent-text tracking-tighter uppercase"
+                >
+                  {{ line.name }}
+                </h2>
+              </div>
+              <div class="text-right">
+                <div
+                  class="dim-text text-[10px] uppercase mb-1 tracking-[0.2em]"
+                >
+                  Secteur_Statut
+                </div>
+                <div class="text-accent font-bold tracking-widest">
+                  {{ line.status }}
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-12">
+              <div class="space-y-8">
+                <div class="space-y-4">
+                  <span
+                    class="dim-text text-[10px] uppercase tracking-[0.2em] block"
+                    >// DESCRIPTION_FONCTIONNELLE</span
+                  >
+                  <p class="text-fg/90 leading-relaxed text-lg">
+                    {{ line.description }}
+                  </p>
+                </div>
+
+                <div v-if="line.url !== '#'" class="pt-4">
+                  <a
+                    :href="line.url"
+                    target="_blank"
+                    class="inline-flex items-center space-x-3 px-8 py-3 bg-accent text-bg font-bold hover:bg-accent/90 transition-all active:scale-95 group"
+                  >
+                    <span>LANCER L'APPLICATION</span>
+                    <span class="group-hover:translate-x-1 transition-transform"
+                      >↗</span
+                    >
+                  </a>
+                </div>
+              </div>
+
+              <div class="space-y-8 border-l border-border/30 pl-10">
+                <div>
+                  <h3
+                    class="dim-text text-[10px] uppercase mb-4 tracking-[0.2em]"
+                  >
+                    Dépendances_Techniques
+                  </h3>
+                  <div class="flex flex-wrap gap-2">
+                    <span
+                      v-for="t in line.tech"
+                      :key="t"
+                      class="px-3 py-1 bg-surface text-fg/80 text-[11px] border border-border/50 uppercase tracking-wider font-mono"
+                      >{{ t }}</span
+                    >
+                  </div>
+                </div>
+                <div>
+                  <h3
+                    class="dim-text text-[10px] uppercase mb-2 tracking-[0.2em]"
+                  >
+                    Rôle_Attribué
+                  </h3>
+                  <div class="text-fg font-medium term-main tracking-tight">
+                    {{ line.role }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Persistent Footer (Input + Optional Help) -->
+      <div
+        v-if="!isBooting"
+        class="mt-4 border-t border-border/50 bg-bg/90 backdrop-blur-md pt-4 pb-4 z-40 container-max"
+      >
+        <div class="w-full px-4">
           <!-- Current Input Prompt -->
-          <div v-if="!isBooting" class="flex items-center mt-2">
-            <span class="accent-text mr-2">thomas-portfolio:~$</span>
+          <div class="flex items-center term-main">
+            <span class="accent-text mr-2 font-bold tracking-tight"
+              >thomas-portfolio:~$</span
+            >
             <input
               ref="inputRef"
               v-model="currentInput"
               type="text"
-              class="bg-transparent border-none outline-none flex-grow text-fg caret-accent p-0 font-mono placeholder:text-dim"
-              placeholder="écrivez une commande (essayer: aide)"
+              class="bg-transparent border-none outline-none flex-grow text-fg caret-accent p-0 font-mono placeholder:text-dim/50 term-main"
+              placeholder="écrivez une commande (ex: aide)"
               @keydown.enter="handleCommand"
               @keydown.up.prevent="navigateHistory('up')"
               @keydown.down.prevent="navigateHistory('down')"
@@ -538,6 +810,31 @@ watch(terminalLines, scrollToBottom, { deep: true });
               autocomplete="off"
               autofocus
             />
+          </div>
+
+          <!-- Active Help Display -->
+          <div
+            v-if="activeHelp"
+            class="mt-4 border-t border-border/50 space-y-1 animate-in fade-in slide-in-from-top-2 duration-500"
+          >
+            <div v-for="(line, index) in activeHelp" :key="index">
+              <!-- Command Help Item -->
+              <div
+                v-if="line.type === 'command'"
+                class="grid grid-cols-[180px_auto] term-small"
+              >
+                <span class="text-fg font-bold">{{ line.name }}</span>
+                <span class="dim-text tracking-tight">// {{ line.desc }}</span>
+              </div>
+
+              <!-- Simple Text -->
+              <div
+                v-else
+                :class="[line.class || 'text-fg term-main font-bold mb-4']"
+              >
+                {{ line.content }}
+              </div>
+            </div>
           </div>
         </div>
       </div>

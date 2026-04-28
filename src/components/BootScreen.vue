@@ -46,7 +46,7 @@ onMounted(async () => {
     <div
       v-for="(line, index) in bootLines"
       :key="'boot-' + index"
-      class="mb-1 dim-text"
+      class="mb-1 dim-text term-secondary"
     >
       {{ line }}
     </div>

@@ -207,6 +207,17 @@ body {
   background: var(--accent);
 }
 
+/* Hide scrollbars for ASCII art */
+.ascii-art {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  overflow: hidden;
+}
+
+.ascii-art::-webkit-scrollbar {
+  display: none;
+}
+
 .terminal-container::before {
   content: "";
   position: absolute;
@@ -234,12 +245,36 @@ body {
   color: var(--accent);
 }
 
+.container-max {
+  max-width: 1400px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .orange-text {
   color: var(--orange);
 }
 
 .border-color {
   border-color: var(--border);
+}
+
+/* Font Size Utilities */
+.term-main {
+  font-size: 17px;
+}
+
+.term-secondary {
+  font-size: 16px;
+}
+
+.term-label {
+  font-size: 15px;
+}
+
+.term-small {
+  font-size: 14px;
 }
 
 /* Screen Power On Effect (CRT Style) */
