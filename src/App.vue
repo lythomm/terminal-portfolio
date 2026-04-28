@@ -194,7 +194,7 @@ const commands = {
       { type: "header", content: "// expérience professionnelle" },
       {
         type: "experience",
-        role: "Développeur Fullstack (alternance -> CDI)",
+        role: "Développeur Fullstack",
         company: "BedBoat",
         url: "https://bedboat.fr/",
         period: "2022 - 2026",
@@ -221,7 +221,7 @@ const commands = {
       { type: "text", content: "" },
       {
         type: "experience",
-        role: "Développeur Fullstack (alternance)",
+        role: "Développeur Fullstack",
         company: "iologo",
         url: "https://www.iologo.io/",
         period: "2021 - 2022",
@@ -244,7 +244,7 @@ const commands = {
       { type: "text", content: "" },
       {
         type: "experience",
-        role: "Développeur Frontend (alternance)",
+        role: "Développeur Frontend",
         company: "Lexidia",
         url: "https://www.lexidia.org/",
         period: "2020 - 2021",
