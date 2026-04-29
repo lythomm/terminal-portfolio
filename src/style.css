@@ -8,6 +8,7 @@
   --color-accent: #4ade80;
   --color-accent-border: #2a5c38;
   --color-orange: #e8854a;
+  --color-cyan: #00ffcc;
   --color-err: #d16060;
   --color-border: #323630;
 
@@ -34,6 +35,7 @@
   --accent: #4ade80;
   --accent-border: #2a5c38;
   --orange: #e8854a;
+  --cyan: #00ffcc;
   --err: #d16060;
   --border: #323630;
 }
@@ -112,12 +114,15 @@ body {
   position: relative;
   overflow: hidden;
   animation: flicker 0.15s infinite;
-  transform: perspective(1000px) scale(1.02);
-  border-radius: 50% / 3%;
   filter: contrast(1.05) brightness(1.15) saturate(1.2) url(#crt-bulge);
   box-shadow:
     inset 0 0 60px rgba(0, 0, 0, 0.45),
     0 0 20px rgba(0, 0, 0, 0.3);
+
+  /* Global Chromatic Aberration */
+  text-shadow:
+    1px 0 0 rgba(255, 0, 0, 0.05),
+    -1px 0 0 rgba(0, 0, 255, 0.05);
 }
 
 /* Moving Scanlines */
@@ -169,7 +174,8 @@ body {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: 40px;
+  /* Balanced padding for better centering */
+  padding: 2rem 4rem;
   overflow: hidden;
   border: 1px solid var(--border);
   position: relative;
@@ -235,6 +241,7 @@ body {
 
 .prompt-accent {
   color: var(--accent);
+  text-shadow: 0 0 5px rgba(74, 222, 128, 0.4);
 }
 
 .dim-text {
@@ -243,6 +250,7 @@ body {
 
 .accent-text {
   color: var(--accent);
+  text-shadow: 0 0 5px rgba(74, 222, 128, 0.4);
 }
 
 .container-max {
@@ -254,6 +262,7 @@ body {
 
 .orange-text {
   color: var(--orange);
+  text-shadow: 0 0 5px rgba(232, 133, 74, 0.4);
 }
 
 .border-color {
@@ -346,4 +355,56 @@ body {
 
 .cyber-glitch-in {
   animation: cyberGlitchIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+/* --- Cyberpunk / Retro Terminal Animations --- */
+
+/* Entrance Glitch specifically for initialization */
+@keyframes entryGlitch {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px) skewX(10deg);
+    clip-path: inset(0 100% 0 0);
+    filter: brightness(3);
+  }
+  20% {
+    opacity: 0.5;
+    transform: translateX(10px) skewX(-10deg);
+    clip-path: inset(0 0 0 0);
+    filter: brightness(1.5);
+  }
+  40% {
+    opacity: 0.8;
+    transform: translateX(-5px) skewX(5deg);
+    clip-path: inset(0 0 50% 0);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(2px) skewX(-2deg);
+    clip-path: inset(30% 0 0 0);
+  }
+  80% {
+    transform: translateX(0) skewX(0);
+    clip-path: inset(0 0 0 0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) skewX(0);
+    filter: none;
+  }
+}
+
+.stagger-load {
+  animation:
+    entryGlitch 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Neon Text Glows */
+.text-glow-cyan {
+  text-shadow: 0 0 8px rgba(0, 255, 204, 0.6);
+}
+.text-glow-orange {
+  text-shadow: 0 0 8px rgba(232, 133, 74, 0.6);
+}
+.text-glow-err {
+  text-shadow: 0 0 8px rgba(209, 96, 96, 0.6);
 }

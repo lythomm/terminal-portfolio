@@ -30,9 +30,9 @@ defineExpose({ focus });
 
 <template>
   <div
-    class="mt-4 border-t border-border/50 bg-bg/90 backdrop-blur-md pt-4 pb-4 z-40 container-max"
+    class="mt-4 border-t border-border/50 bg-bg/90 backdrop-blur-md pt-4 pb-4 z-40"
   >
-    <div class="w-full px-4">
+    <div class="w-full px-6">
       <!-- Current Input Prompt -->
       <div class="flex items-center term-main">
         <span class="accent-text mr-2 font-bold tracking-tight"

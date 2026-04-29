@@ -8,9 +8,9 @@ defineProps({
 </script>
 
 <template>
-  <div class="sticky top-0 z-40 pb-5 pt-2">
+  <div class="sticky top-0 z-40 pb-3 pt-2">
     <div
-      class="container-max flex justify-between items-start font-mono term-label tracking-widest"
+      class="w-full flex justify-between items-start font-mono term-label tracking-widest px-6"
     >
       <div class="space-y-1.5">
         <div class="flex items-center space-x-3">
@@ -54,7 +54,7 @@ defineProps({
       </div>
     </div>
     <!-- Separator -->
-    <div class="container-max px-4 mt-6">
+    <div class="w-full px-6 mt-6">
       <div
         class="h-px w-full bg-linear-to-r from-transparent via-border to-transparent"
       ></div>
