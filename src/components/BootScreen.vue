@@ -42,14 +42,44 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="boot-sequence">
-    <div
-      v-for="(line, index) in bootLines"
-      :key="'boot-' + index"
-      class="mb-1 dim-text term-secondary"
-    >
-      {{ line }}
+  <div class="relative h-full w-full overflow-hidden">
+    <!-- CRT Power-On Flash -->
+    <div class="absolute inset-0 z-50 pointer-events-none flash-overlay"></div>
+    
+    <div class="relative z-10 p-4">
+      <div
+        v-for="(line, index) in bootLines"
+        :key="'boot-' + index"
+        class="mb-1 dim-text term-secondary"
+      >
+        {{ line }}
+      </div>
+      <span class="animate-pulse">_</span>
     </div>
-    <span class="animate-pulse">_</span>
   </div>
 </template>
+
+<style scoped>
+.flash-overlay {
+  background: white;
+  animation: crtFlash 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+@keyframes crtFlash {
+  0% {
+    opacity: 0;
+    transform: scaleY(0.002) scaleX(0);
+  }
+  5% {
+    opacity: 1;
+    transform: scaleY(0.002) scaleX(1);
+  }
+  15% {
+    opacity: 1;
+    transform: scaleY(1) scaleX(1);
+  }
+  100% {
+    opacity: 0;
+  }
+}
+</style>

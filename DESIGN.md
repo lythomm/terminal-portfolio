@@ -1,41 +1,39 @@
-# Design System: ZUI Portfolio
+# Design System: Thomas OS Terminal Portfolio
 
-**Project:** zui.ooo — Terminal-aesthetic product design portfolio
-**Author:** Zui Chen
+**Project:** Thomas OS
+**Author:** Thomas
 
 ---
 
 ## 1. Visual Theme & Atmosphere
 
-Dark, dense, and monospaced. The aesthetic is a retro terminal operating system: a fictional "ZUI_OS" running in a browser. Everything feels like it was typed, not designed. Text is the primary UI element. No gradients, no rounded corners, no drop shadows on interactive elements.
+Dark, glowing, and monospaced. The aesthetic is a retro terminal operating system: "THOMAS_OS" running in a browser, combined with cyberpunk influences. The interface feels like a vintage CRT monitor powering up, complete with screen curvature, scanlines, and RGB chromatic aberration. Interactions and text reveals feature a premium cyberpunk "glitch" effect.
 
-The palette is deep green-tinted black — not pure black, not dark grey, but the particular dark of old CRT phosphor screens. A CRT scanline overlay and corner vignette are always present as CSS pseudo-elements.
+The palette is deep green-tinted black (`#1d201e`) mimicking old CRT phosphor screens. A moving CRT scanline overlay, static RGB grain, and dynamic flicker are always present via CSS.
 
-Density is high. Whitespace is intentional and restrained. The tone is quiet and precise — information-first, ornament-last.
+The tone is technical, immersive, and highly interactive.
 
 ---
 
 ## 2. Color Palette & Roles
 
-All colors are CSS custom properties on `:root`.
+All colors are defined as CSS variables.
 
 | Token | Hex | Role |
 |---|---|---|
-| `--bg` | `#0f1210` | Page background — dark green-tinted, not black |
-| `--surface` | `#161a15` | Elevated surface — image placeholders, widget fills |
+| `--bg` | `#1d201e` | Page background — CRT screen off-black |
+| `--surface` | `#262a27` | Elevated surface |
 | `--fg` | `#d4d8d0` | Primary text — warm off-white, never pure white |
-| `--dim` | `#5a6058` | Muted text — labels, metadata, secondary info |
-| `--accent` | `#4ade80` | Green — command prompts, LIVE status, active nav, links |
-| `--accent-border` | `#2a5c38` | Green border — badges, open buttons, callout left-rule |
-| `--orange` | `#e8854a` | Orange — WIP status, warnings, seeking-role indicators |
-| `--err` | `#d16060` | Error states only — not used decoratively |
-| `--border` | `#2a2e28` | All borders and dividers — slightly warm dark |
+| `--dim` | `#6a7068` | Muted text — labels, metadata, shortcuts |
+| `--accent` | `#4ade80` | Green — command prompts, ASCII art, active borders |
+| `--accent-border` | `#2a5c38` | Green border — scrollbars, hover states |
+| `--orange` | `#e8854a` | Orange — warnings or special highlights |
+| `--err` | `#d16060` | Error states (e.g. command not found) |
+| `--border` | `#323630` | Borders and dividers |
 
 **Usage rules:**
-- Green (`--accent`) is reserved for interactive affordances and live/shipped status. Do not use it for decorative color.
-- Orange (`--orange`) signals caution or in-progress state. Do not use it for positive states.
-- Never use pure `#000000` or `#ffffff`. Always use the palette tokens.
-- Background layers: `--bg` for page, `--surface` for components that sit above the page.
+- Green (`--accent`) is the primary color for the terminal prompt (`thomas-portfolio:~$`) and ASCII art.
+- Avoid pure `#000000` or `#ffffff`.
 
 ---
 
@@ -43,184 +41,84 @@ All colors are CSS custom properties on `:root`.
 
 **Single font family throughout:** `'Geist Mono', 'Courier New', monospace`
 
-No serif or sans-serif typefaces. The monospace constraint is absolute — it is the aesthetic identity of the system.
+The monospace constraint is absolute — it is the aesthetic identity of the terminal system.
 
-| Context | Size | Weight |
+| Context | Size / Class | Weight |
 |---|---|---|
-| Body / case study text | 14px | 400 |
-| Secondary / meta text | 13px | 400 |
-| Small labels, section titles | 11–12px | 400 |
-| Tiny labels, subtitles | 9–10px | 400 |
-| Case study title | 28px | 500 |
-| ASCII art header | 10.5px | 400 |
+| Body / terminal text | 17px (`.term-main`) | 400 |
+| Secondary / meta text | 16px (`.term-secondary`) | 400 |
+| Small labels | 15px (`.term-label`) | 400 |
+| Tiny text | 14px (`.term-small`) | 400 |
 
-**Letter-spacing:** Section titles use `letter-spacing: 0.12em` with `text-transform: uppercase`. Body text uses no letter-spacing.
-
-**Line-height:** 1.6 for body, 1.75 for long-form case study prose, 1.12 for ASCII art.
-
-**Anti-aliasing:** `-webkit-font-smoothing: none` — intentionally pixelated, no sub-pixel smoothing.
+**Letter-spacing:** Uppercase labels use `.tracking-widest` or `tracking-[0.2em]`.
+**Anti-aliasing:** `-webkit-font-smoothing: none` — intentionally sharp and pixelated.
 
 ---
 
-## 4. Component Stylings
+## 4. Layout & UI Elements
 
-### Navigation
-Horizontal list of 4 items. Active item: `color: --bg` on `background: --accent` (inverted). Inactive: `color: --dim`. No borders, no underlines. Click target: full label text.
+### The CRT Screen
+The `#app` container simulates a curved CRT screen:
+- `border-radius: 50% / 3%;`
+- SVG filter for bulge (`url(#crt-bulge)`)
+- Dynamic flickering (`animation: flicker 0.15s infinite;`)
+- Inner shadow (`box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.45)...`)
 
-### File Table (Work Index)
-Grid layout: `210px 80px 120px 1fr`. File names in `--accent`. Size and date in `--dim`. Expandable metadata rows revealed on click, hidden by default. Open button appears only after expanding.
+### Overlays
+- **Moving Scanlines:** A pseudo-element that translates Y from 0 to 100% continuously.
+- **Static Grain:** A pseudo-element providing a subtle RGB shift and vignette.
 
-### Open Button
-```
-border: 1px solid --accent-border
-color: --accent
-padding: 2px 10px
-font-size: 12px
-```
-No border-radius. Hover: subtle green tint fill `rgba(74,222,128,0.08)`.
+### Terminal Content
+- Flex layout with custom scrollbars.
+- Scrollbar thumb is `--accent-border` and changes to `--accent` on hover.
+- A static background grid `repeating-linear-gradient` is applied to `.terminal-container`.
 
-### Case Study Header
-Title at 28px / weight 500. Tagline at 13px in `--dim`. Meta row (ROLE, YEAR, STACK, STATUS) separated by top/bottom `--border` lines. STATUS: green for LIVE, orange for WIP.
+### Power Button
+- Huge circular button (`w-24 h-24`, `rounded-full`).
+- Active and hover states feature a glowing green shadow (`shadow-[0_0_20px_rgba(74,222,128,0.3)]`).
 
-### Section Titles
-```
-font-size: 11px
-letter-spacing: 0.12em
-text-transform: uppercase
-color: --dim
-border-bottom: 1px solid --border
-padding-bottom: 4px
-```
-Prefix convention: `// section name` (lowercase after `//`).
-
-### Callout Block
-```
-border-left: 2px solid --accent-border
-padding: 8px 14px
-background: rgba(74,222,128,0.03)
-font-size: 13px
-```
-Used for key insights or pull quotes.
-
-### Image Slots (placeholder)
-```
-border: 1px dashed --border
-background: --surface
-color: --dim
-```
-Real images replace the slot entirely — no wrapper styling on real images beyond `border: 1px solid --border`.
-
-### Buttons / Interactive Elements
-No border-radius anywhere. Borders use `--border` or `--accent-border`. Background is always transparent by default; hover adds a faint accent tint.
-
-### Terminal Prompt
-`$` character in `--accent`. Input field: no border, no background, `caret-color: --accent`.
-
-### Status Badges
-- `LIVE` / `SHIPPED` → `--accent` (green)
-- `WIP` / `OPEN_TO_WORK` → `--orange` (orange)
-- `ARCHIVED` → `--dim` (grey)
+### Animations
+- **Power On:** The terminal scales vertically from 0.002 to 1 and changes brightness/contrast to simulate a CRT powering on (`.power-on-anim`).
+- **Glitch Reveal (Cyberpunk):** New lines of terminal output appear sequentially with the `.cyber-glitch-in` class, which combines translation, skew, and a split red/cyan chromatic aberration drop-shadow for a premium glitch effect.
+- **Pulse:** Used for "Press to start" style hints (`animate-pulse`).
+- **Cursor Blink:** Standard terminal cursor blinking effect.
 
 ---
 
-## 5. Layout Principles
+## 5. Responsive Behavior
 
-**Max container width:** 1100px, centered, `padding: 20px 24px`.
-
-**No rounded corners** on any element in this system.
-
-**No box-shadows** on interactive elements.
-
-**Spacing scale:** Multiples of 4px. Common values: 4, 6, 8, 10, 12, 14, 16, 20, 24, 28.
-
-**Grid approach:** CSS Grid over Flexbox for multi-column layouts. Gutters are `8–16px`. Never use `margin: auto` for centering content — use grid/flex alignment.
-
-**Borders as dividers:** `1px solid --border` for horizontal rules. No decorative rules — borders exist only to separate distinct content regions.
-
-**Vertical rhythm:** Sections separated by `margin-bottom: 24px`. Case study section gap: `margin-top: 18px`.
+- **Desktop First:** Designed for full keyboard interaction and large screen CRT immersion.
+- **Mobile Fallback:** If a mobile device is detected, the terminal refuses to boot and displays an error (`MOBILE_DEVICE_INCOMPATIBLE_ERR`), instructing the user to switch to a desktop with a physical keyboard.
 
 ---
 
-## 6. Depth & Elevation
-
-Two visual layers only:
-
-| Layer | Color | Usage |
-|---|---|---|
-| Base | `--bg` (`#0f1210`) | Page background |
-| Surface | `--surface` (`#161a15`) | Components above the page: image slots, data widgets |
-
-No shadow system. Elevation is expressed through border presence, not shadow.
-
-**Always-on overlay effects (CSS pseudo-elements on `body`):**
-- `::before` — CRT scanlines: `repeating-linear-gradient` at 5% opacity, `z-index: 100`
-- `::after` — Corner vignette: radial gradient darkening to 40% at edges, `z-index: 99`
-- Both: `pointer-events: none`
-
----
-
-## 7. Do's and Don'ts
+## 6. Do's and Don'ts
 
 **Do:**
-- Use monospace for all text, labels, code, and UI elements
-- Express state changes through color only (green/orange/dim), not icons
-- Use `--dim` for anything secondary — metadata, labels, timestamps
-- Keep borders as thin as possible: always 1px
-- Use `letter-spacing` and `text-transform: uppercase` to elevate small labels
-- Prefer `border-bottom` row dividers over full-border cards for lists/tables
+- Use the `.term-*` utility classes for font sizes.
+- Embrace sequential, staggered animations for text reveals to maintain the cyberpunk feel.
+- Ensure all interactive elements provide visual feedback (like the power button's glow).
 
 **Don't:**
-- Don't use `border-radius` on any element
-- Don't use `box-shadow` for elevation
-- Don't use pure black or white — always use palette tokens
-- Don't use more than two font weights (400 and 500)
-- Don't add icons or emoji unless explicitly requested
-- Don't center-align body text — left-aligned throughout
-- Don't use background fills on large container cells — reserve fills for small inline code/formula blocks only
+- Don't use sans-serif fonts.
+- Don't make text appear instantly without animation inside the terminal output.
+- Don't break the illusion of the CRT monitor with flat, modern web patterns.
 
 ---
 
-## 8. Responsive Behavior
+## 7. Quick Reference
 
-**Breakpoints:**
-- `760px` — main layout breakpoint: nav collapses to 2-column grid, file table reflows to stacked layout, ASCII art scales down
-- `480px` — small phones: font sizes reduce further, nav items shrink
-
-**Mobile adjustments:**
-- Font size: 13px base (from 14px)
-- `#app` padding: `16px`
-- File row: switches from 4-column grid to stacked single-column layout
-- Nav: 4-item horizontal list → 2×2 grid
-- Case study meta row: horizontal flex → vertical stack
-- Multi-column image grids collapse to single column
-- `position: fixed` is never used (breaks scroll layout) — avoid it
-
-**Touch targets:** Minimum 44px height for interactive nav items on mobile.
-
----
-
-## 9. Agent Prompt Guide
-
-When generating or modifying UI for this project:
-
-- Font: always `'Geist Mono', 'Courier New', monospace`
-- Background: `#0f1210` (never black)
-- Primary text: `#d4d8d0`
-- Accent / interactive: `#4ade80`
-- Borders: `#2a2e28`, always 1px
-- No border-radius, no box-shadow, no icons
-- Section titles: `11px, letter-spacing .12em, uppercase, color #5a6058`
-- Status LIVE: green `#4ade80` | Status WIP: orange `#e8854a`
-
-**Quick reference:**
-```
---bg:             #0f1210
---surface:        #161a15
+```css
+--bg:             #1d201e
+--surface:        #262a27
 --fg:             #d4d8d0
---dim:            #5a6058
+--dim:            #6a7068
 --accent:         #4ade80
 --accent-border:  #2a5c38
 --orange:         #e8854a
---border:         #2a2e28
-font:             'Geist Mono', 'Courier New', monospace
+--err:            #d16060
+--border:         #323630
+
+Font: 'Geist Mono', 'Courier New', monospace
+Animations: .power-on-anim, .cyber-glitch-in
 ```
