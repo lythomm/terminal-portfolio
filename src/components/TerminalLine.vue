@@ -23,7 +23,7 @@ defineEmits(["run-command"]);
     <!-- Header -->
     <div
       v-else-if="line.type === 'header'"
-      class="accent-text term-main uppercase tracking-widest mb-4 mt-8 first:mt-0"
+      class="accent-text term-main uppercase tracking-widest mb-4 mt-8 first:mt-0 animate-pulse"
     >
       {{ line.content }}
     </div>
@@ -44,17 +44,17 @@ defineEmits(["run-command"]);
     <!-- Project Header -->
     <div
       v-else-if="line.type === 'project-header'"
-      class="grid grid-cols-[1fr_80px_1.5fr_100px] gap-4 mb-4 border-b border-border/30 pb-2 px-4"
+      class="grid grid-cols-[1fr_80px_1.5fr_100px] gap-4 border-b border-border/30 pb-2 px-4"
     >
       <div class="flex items-center space-x-3">
         <span class="w-4"></span>
-        <div class="dim-text text-xs uppercase tracking-widest">Nom</div>
+        <div class="dim-text text-label uppercase tracking-widest">Nom</div>
       </div>
-      <div class="dim-text text-xs uppercase tracking-widest">Date</div>
-      <div class="dim-text text-xs uppercase tracking-widest text-center">
+      <div class="dim-text text-label uppercase tracking-widest">Date</div>
+      <div class="dim-text text-label uppercase tracking-widest text-center">
         Stack techniques
       </div>
-      <div class="dim-text text-xs uppercase tracking-widest text-right">
+      <div class="dim-text text-label uppercase tracking-widest text-right">
         Statut
       </div>
     </div>
@@ -62,25 +62,25 @@ defineEmits(["run-command"]);
     <!-- Project Item -->
     <div
       v-else-if="line.type === 'project'"
-      class="group relative py-2.5 px-4 hover:bg-accent/5 transition-colors cursor-pointer border border-transparent hover:border-accent/10"
+      class="group relative py-2 px-4 hover:bg-accent/5 transition-colors cursor-pointer border border-transparent hover:border-accent/10"
       @click="$emit('run-command', 'ouvrir ' + line.name)"
     >
       <div class="grid grid-cols-[1fr_80px_1.5fr_100px] gap-4 items-center">
         <div class="flex items-center space-x-3">
           <span
-            class="text-accent text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+            class="text-accent term-secondary opacity-0 group-hover:opacity-100 transition-opacity"
             >→</span
           >
           <span class="text-fg font-bold uppercase tracking-tight">{{
             line.name
           }}</span>
         </div>
-        <div class="text-dim text-xs tabular-nums">{{ line.year }}</div>
-        <div class="text-dim/60 text-[11px] text-center truncate">
+        <div class="text-dim term-secondary tabular-nums">{{ line.year }}</div>
+        <div class="text-dim term-secondary text-center truncate">
           {{ line.stack }}
         </div>
         <div
-          class="text-accent text-[10px] text-right font-bold tracking-widest uppercase"
+          class="text-accent text-small text-right font-bold tracking-widest uppercase text-nowrap"
         >
           {{ line.status }}
         </div>
@@ -100,7 +100,7 @@ defineEmits(["run-command"]);
         <a
           :href="line.url"
           target="_blank"
-          class="text-accent hover:underline decoration-accent/30 underline-offset-4"
+          class="text-accent hover:underline underline-offset-4"
           >{{ line.company }}</a
         >
       </div>
@@ -119,8 +119,7 @@ defineEmits(["run-command"]);
     <!-- Command Help -->
     <div
       v-else-if="line.type === 'command'"
-      class="flex items-center space-x-4 ml-2 mb-1 group cursor-pointer hover:bg-accent/5 transition-colors p-1 rounded-sm"
-      @click="$emit('run-command', line.name.split(' ')[0])"
+      class="flex items-center space-x-4 ml-2 mb-1 group p-1 rounded-sm"
     >
       <span class="text-accent font-bold min-w-[120px]">{{ line.name }}</span>
       <span class="text-dim/30">|</span>
@@ -139,10 +138,38 @@ defineEmits(["run-command"]);
       :project="line"
     />
 
+    <div
+      v-else-if="line.type === 'contact-row'"
+      class="font-mono flex items-center w-full max-w-[450px] leading-none mb-0"
+    >
+      <span class="text-fg opacity-40">│</span>
+      <span
+        class="px-3 w-[100px] text-dim/60 shrink-0 uppercase tracking-tighter term-label"
+        >{{ line.label }}</span
+      >
+      <span class="text-fg opacity-40">│</span>
+      <a
+        v-if="line.url"
+        :href="line.url"
+        target="_blank"
+        class="flex-grow px-4 text-accent hover:underline! truncate term-label"
+      >
+        {{ line.content }}
+      </a>
+      <span
+        v-else
+        class="flex-grow px-4 text-fg/80 truncate term-small hover:underline!"
+        >{{ line.content }}</span
+      >
+    </div>
+
     <!-- Simple Text -->
     <div
       v-else-if="line.type === 'text'"
-      :class="[line.class || 'text-fg/90 term-main leading-relaxed']"
+      :class="[
+        line.class || 'text-fg/90 term-main leading-relaxed',
+        'max-w-[450px]',
+      ]"
     >
       {{ line.content }}
     </div>

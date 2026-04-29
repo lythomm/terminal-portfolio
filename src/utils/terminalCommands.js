@@ -276,11 +276,12 @@ export const commandRegistry = [
     name: "contact",
     desc: "me contacter (email, réseaux)",
     handler: () => [
-      { type: "header", content: "// me contacter" },
-      { type: "text", content: "Email: lythomm@gmail.com" },
-      { type: "text", content: "LinkedIn: linkedin.com/in/thomas-ly" },
-      { type: "text", content: "GitHub: github.com/lythomm" },
-      { type: "text", content: "Portfolio: thomas-ly.vercel.app" },
+      { type: "header", content: "// fiche contact 0xADR" },
+      { type: "text", content: "┌────────────────────────────────────────┐", class: "accent-text opacity-40 font-mono leading-none" },
+      { type: "contact-row", label: "EMAIL", content: "lythomm@gmail.com", url: "mailto:lythomm@gmail.com" },
+      { type: "contact-row", label: "GITHUB", content: "@lythomm", url: "https://github.com/lythomm" },
+      { type: "contact-row", label: "LINKEDIN", content: "@thomas-ly", url: "https://www.linkedin.com/in/thomas-ly/" },
+      { type: "text", content: "└────────────────────────────────────────┘", class: "accent-text opacity-40 font-mono leading-none" },
     ],
   },
   {

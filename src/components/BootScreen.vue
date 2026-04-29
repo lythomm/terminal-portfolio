@@ -45,12 +45,12 @@ onMounted(async () => {
   <div class="relative h-full w-full overflow-hidden">
     <!-- CRT Power-On Flash -->
     <div class="absolute inset-0 z-50 pointer-events-none flash-overlay"></div>
-    
+
     <div class="relative z-10 p-4">
       <div
         v-for="(line, index) in bootLines"
         :key="'boot-' + index"
-        class="mb-1 dim-text term-secondary"
+        class="mb-1 dim-text term-main"
       >
         {{ line }}
       </div>

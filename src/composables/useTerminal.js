@@ -79,7 +79,7 @@ export function useTerminal(containerRef, inputRef) {
 
       // Execute command
       const context = { terminalLines, activeHelp };
-      const result = cmd.handler(args, context);
+      const result = cmd.handler(args, context, commandRegistry);
 
       if (cmdNameLower === "aide") {
         activeHelp.value = result;
