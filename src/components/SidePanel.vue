@@ -8,7 +8,18 @@ const getCommandResult = (name) => {
   return cmd ? cmd.handler() : [];
 };
 
-const aboutLines = computed(() => getCommandResult("a-propos"));
+const aboutLines = computed(() => {
+  const lines = getCommandResult("a-propos");
+  const textLines = lines.filter((l) => l.type === "text");
+  if (textLines.length > 0) return textLines;
+
+  // Fallback : on extrait la bio de la variante visuelle si elle existe
+  const variant = lines.find((l) => l.type === "about-variant");
+  if (variant && variant.data && variant.data.bio) {
+    return [{ type: "text", content: variant.data.bio }];
+  }
+  return [];
+});
 const projectLines = computed(() =>
   getCommandResult("projets").filter((l) => l.type === "project"),
 );
@@ -33,10 +44,13 @@ const skillLines = [
 
 <template>
   <div
-    class="hidden lg:flex flex-col shrink-0 h-full border-l border-border p-5 pt-0 space-y-6 overflow-y-auto side-panel bg-transparent"
+    class="hidden lg:flex flex-col shrink-0 h-full border-l border-border px-5 space-y-6 overflow-y-auto side-panel bg-transparent"
   >
     <!-- Panel Header -->
-    <div class="flex items-center justify-between mb-6 opacity-60 stagger-load" style="animation-delay: 1800ms">
+    <div
+      class="flex items-center justify-between mb-6 opacity-60 stagger-load"
+      style="animation-delay: 1800ms"
+    >
       <div class="flex items-center space-x-2">
         <div class="w-2 h-2 bg-accent animate-pulse"></div>
         <span class="term-small font-bold tracking-[0.2em] uppercase"
@@ -48,34 +62,34 @@ const skillLines = [
 
     <!-- About Widget -->
     <InfoWidget
-      title="User_Bio"
+      title="USER_BIO"
       colorClass="border-accent/40"
       titleBgClass="bg-accent"
       :lines="aboutLines.filter((l) => l.type === 'text')"
       :delay="2000"
     />
 
-    <!-- Skills Widget -->
-    <InfoWidget
-      title="skills.md"
-      colorClass="border-cyan/40"
-      titleBgClass="bg-cyan"
-      :lines="skillLines"
-      :delay="2300"
-    />
-
     <!-- Projects Widget -->
     <InfoWidget
-      title="Archive_Projs"
+      title="PROJECTS.bat"
       colorClass="border-orange/40"
       titleBgClass="bg-orange"
       :lines="projectLines"
+      :delay="2300"
+    />
+
+    <!-- Skills Widget -->
+    <InfoWidget
+      title="SKILLS.md"
+      colorClass="border-cyan/40"
+      titleBgClass="bg-cyan"
+      :lines="skillLines"
       :delay="2600"
     />
 
     <!-- Contact Widget -->
     <InfoWidget
-      title="Comm_Nodes"
+      title="CONTACT_nodes"
       colorClass="border-err/40"
       titleBgClass="bg-err"
       :lines="contactLines"
@@ -84,7 +98,7 @@ const skillLines = [
 
     <!-- Decorative bottom text -->
     <div
-      class="mt-auto pt-8 opacity-20 term-small font-mono leading-tight uppercase tracking-widest stagger-load"
+      class="mt-auto opacity-20 term-small font-mono leading-tight uppercase tracking-widest stagger-load"
       style="animation-delay: 3200ms"
     >
       Core_Net // Thomas_OS<br />

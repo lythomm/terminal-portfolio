@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import moiImage from "../assets/moi.png";
 
 export const projectDetails = {
   bedboat: {
@@ -61,23 +61,22 @@ export const commandRegistry = [
   {
     name: "a-propos",
     desc: "en savoir plus sur moi",
-    handler: () => [
-      { type: "header", content: "// à propos" },
-      {
-        type: "text",
-        content:
-          "Développeur Fullstack / App Engineer avec 5 ans d'expérience, passionné par la création de solutions techniques innovantes et l'optimisation de processus.",
-      },
-      {
-        type: "text",
-        content:
-          "Spécialisé en JavaScript (Vue, React, Node), je conçois des architectures robustes et implémente des automatisations stratégiques (n8n, Make).",
-      },
-      {
-        type: "text",
-        content: "Basé à Toulouse, engagé à livrer un code propre et scalable.",
-      },
-    ],
+    handler: () => {
+      const bioText =
+        "Développeur Fullstack / App Engineer passionné par la création de solutions techniques innovantes. Basé à Toulouse, je conçois des architectures robustes et des automatisations stratégiques pour transformer des idées complexes en produits scalables.";
+
+      return [
+        { type: "header", content: "// Dossier Utilisateur : THOMAS" },
+        {
+          type: "about-variant",
+          variant: "bios",
+          data: {
+            image: moiImage,
+            bio: bioText,
+          },
+        },
+      ];
+    },
   },
   {
     name: "projets",
@@ -134,7 +133,10 @@ export const commandRegistry = [
         ];
       } else {
         return [
-          { type: "error", content: `ERR: Projet '${projectName}' introuvable.` },
+          {
+            type: "error",
+            content: `ERR: Projet '${projectName}' introuvable.`,
+          },
         ];
       }
     },
@@ -245,31 +247,51 @@ export const commandRegistry = [
             title: "FRONTEND_ENGINE",
             id: "FE-802",
             skills: [
-              { name: "Vue.js / Vite", addr: "0x4B", bar: 92, status: "STABLE" },
+              {
+                name: "Vue.js / Vite",
+                addr: "0x4B",
+                bar: 92,
+                status: "STABLE",
+              },
               { name: "React / Next", addr: "0x4C", bar: 85, status: "ACTIVE" },
-              { name: "Tailwind CSS", addr: "0x4A", bar: 95, status: "OPTIMIZED" }
-            ]
+              {
+                name: "Tailwind CSS",
+                addr: "0x4A",
+                bar: 95,
+                status: "OPTIMIZED",
+              },
+            ],
           },
           {
             title: "BACKEND_CORE",
             id: "BE-501",
             skills: [
-              { name: "Node.js / Express", addr: "0x1B", bar: 88, status: "READY" },
+              {
+                name: "Node.js / Express",
+                addr: "0x1B",
+                bar: 88,
+                status: "READY",
+              },
               { name: "PostgreSQL", addr: "0x1C", bar: 75, status: "STABLE" },
-              { name: "Supabase", addr: "0x1D", bar: 82, status: "LINKED" }
-            ]
+              { name: "Supabase", addr: "0x1D", bar: 82, status: "LINKED" },
+            ],
           },
           {
             title: "AUTOMATION_UNIT",
             id: "AU-99",
             skills: [
-              { name: "n8n Workflows", addr: "0x8C", bar: 95, status: "OPTIMIZED" },
+              {
+                name: "n8n Workflows",
+                addr: "0x8C",
+                bar: 95,
+                status: "OPTIMIZED",
+              },
               { name: "Make / Zapier", addr: "0x8D", bar: 85, status: "READY" },
-              { name: "API Logic", addr: "0x8E", bar: 90, status: "ACTIVE" }
-            ]
-          }
-        ]
-      }
+              { name: "API Logic", addr: "0x8E", bar: 90, status: "ACTIVE" },
+            ],
+          },
+        ],
+      },
     ],
   },
   {
@@ -277,11 +299,34 @@ export const commandRegistry = [
     desc: "me contacter (email, réseaux)",
     handler: () => [
       { type: "header", content: "// fiche contact 0xADR" },
-      { type: "text", content: "┌────────────────────────────────────────┐", class: "accent-text opacity-40 font-mono leading-none" },
-      { type: "contact-row", label: "EMAIL", content: "lythomm@gmail.com", url: "mailto:lythomm@gmail.com" },
-      { type: "contact-row", label: "GITHUB", content: "@lythomm", url: "https://github.com/lythomm" },
-      { type: "contact-row", label: "LINKEDIN", content: "@thomas-ly", url: "https://www.linkedin.com/in/thomas-ly/" },
-      { type: "text", content: "└────────────────────────────────────────┘", class: "accent-text opacity-40 font-mono leading-none" },
+      {
+        type: "text",
+        content: "┌────────────────────────────────────────┐",
+        class: "accent-text opacity-40 font-mono leading-none",
+      },
+      {
+        type: "contact-row",
+        label: "EMAIL",
+        content: "lythomm@gmail.com",
+        url: "mailto:lythomm@gmail.com",
+      },
+      {
+        type: "contact-row",
+        label: "GITHUB",
+        content: "@lythomm",
+        url: "https://github.com/lythomm",
+      },
+      {
+        type: "contact-row",
+        label: "LINKEDIN",
+        content: "@thomas-ly",
+        url: "https://www.linkedin.com/in/thomas-ly/",
+      },
+      {
+        type: "text",
+        content: "└────────────────────────────────────────┘",
+        class: "accent-text opacity-40 font-mono leading-none",
+      },
     ],
   },
   {
@@ -314,6 +359,27 @@ export const commandRegistry = [
       });
 
       return helpLines;
+    },
+  },
+  {
+    name: "performance",
+    desc: "basculer entre le mode FULL et ECO",
+    handler: () => {
+      const app = document.getElementById("app");
+      const isLowPerf = app.classList.toggle("low-perf");
+      return [
+        {
+          type: "text",
+          content: `SYSTEM_UPDATE: Mode ${isLowPerf ? "ECO" : "FULL"} activé.`,
+          class: isLowPerf ? "orange-text" : "accent-text",
+        },
+        {
+          type: "text",
+          content: isLowPerf
+            ? "Distorsion d'écran désactivée. (Flicker & Scanlines toujours actifs)"
+            : "Distorsion haute fidélité activée. (GPU recommandé)",
+        },
+      ];
     },
   },
 ];

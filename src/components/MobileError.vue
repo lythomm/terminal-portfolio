@@ -4,7 +4,7 @@
 
 <template>
   <div
-    class="flex flex-col items-center justify-center h-100dvh text-center p-6 space-y-6"
+    class="flex flex-col items-center justify-center h-screen text-center p-6 space-y-6"
   >
     <div class="text-err text-5xl animate-pulse">ERREUR MATÉRIELLE</div>
     <div class="border border-err/30 p-8 bg-err/5 max-w-md">

@@ -121,7 +121,7 @@ const onBootComplete = () => {
                   v-for="(line, index) in terminalLines"
                   :key="index"
                   :line="line"
-                  v-memo="[line.content, line.type, line.name]"
+                  v-memo="[line.content, line.type, line.name, line.src]"
                   @run-command="runCommand"
                 />
               </div>

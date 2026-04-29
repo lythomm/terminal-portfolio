@@ -15,7 +15,27 @@
   --font-mono: "Geist Mono", "Courier New", monospace;
 
   --animate-cursor-blink: blink 1s step-end infinite;
+  --animate-fade-in: fade-in 0.5s ease-out;
+  --animate-slide-in-top: slide-in-top 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slide-in-bottom: slide-in-bottom 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-slide-in-left: slide-in-left 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slide-in-top {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes slide-in-bottom {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes slide-in-left {
+    from { transform: translateX(-20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
   @keyframes blink {
     0%,
     100% {
@@ -125,6 +145,12 @@ body {
     -1px 0 0 rgba(0, 0, 255, 0.05);
 }
 
+/* Low Performance Mode - Disables ONLY the heavy SVG distortion filter */
+#app.low-perf {
+  /* We keep the color adjustments but remove the expensive url(#crt-bulge) */
+  filter: contrast(1.05) brightness(1.15) saturate(1.2);
+}
+
 /* Moving Scanlines */
 @keyframes scanline {
   0% {
@@ -175,7 +201,7 @@ body {
   display: flex;
   flex-direction: column;
   /* Balanced padding for better centering */
-  padding: 2rem 4rem;
+  padding: 4rem 6rem;
   overflow: hidden;
   border: 1px solid var(--border);
   position: relative;
@@ -319,85 +345,6 @@ body {
   animation: powerOn 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
 }
 
-@keyframes cyberGlitchIn {
-  0% {
-    opacity: 0;
-    transform: translateX(-10px) skewX(20deg);
-    filter: drop-shadow(3px 0 0 rgba(209, 96, 96, 0.8))
-      drop-shadow(-3px 0 0 rgba(74, 222, 128, 0.8));
-  }
-  20% {
-    opacity: 0.8;
-    transform: translateX(5px) skewX(-10deg);
-    filter: drop-shadow(-2px 0 0 rgba(209, 96, 96, 0.6))
-      drop-shadow(2px 0 0 rgba(74, 222, 128, 0.6));
-  }
-  40% {
-    opacity: 0.9;
-    transform: translateX(-2px) skewX(5deg);
-    filter: drop-shadow(1px 0 0 rgba(209, 96, 96, 0.4))
-      drop-shadow(-1px 0 0 rgba(74, 222, 128, 0.4));
-  }
-  60% {
-    opacity: 1;
-    transform: translateX(0) skewX(0);
-    filter: none;
-  }
-  80% {
-    opacity: 0.8;
-  }
-  100% {
-    opacity: 1;
-    transform: none;
-    filter: none;
-  }
-}
-
-.cyber-glitch-in {
-  animation: cyberGlitchIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-}
-/* --- Cyberpunk / Retro Terminal Animations --- */
-
-/* Entrance Glitch specifically for initialization */
-@keyframes entryGlitch {
-  0% {
-    opacity: 0;
-    transform: translateX(-20px) skewX(10deg);
-    clip-path: inset(0 100% 0 0);
-    filter: brightness(3);
-  }
-  20% {
-    opacity: 0.5;
-    transform: translateX(10px) skewX(-10deg);
-    clip-path: inset(0 0 0 0);
-    filter: brightness(1.5);
-  }
-  40% {
-    opacity: 0.8;
-    transform: translateX(-5px) skewX(5deg);
-    clip-path: inset(0 0 50% 0);
-  }
-  60% {
-    opacity: 1;
-    transform: translateX(2px) skewX(-2deg);
-    clip-path: inset(30% 0 0 0);
-  }
-  80% {
-    transform: translateX(0) skewX(0);
-    clip-path: inset(0 0 0 0);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0) skewX(0);
-    filter: none;
-  }
-}
-
-.stagger-load {
-  animation:
-    entryGlitch 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
 /* Neon Text Glows */
 .text-glow-cyan {
   text-shadow: 0 0 8px rgba(0, 255, 204, 0.6);
@@ -405,6 +352,59 @@ body {
 .text-glow-orange {
   text-shadow: 0 0 8px rgba(232, 133, 74, 0.6);
 }
+
 .text-glow-err {
   text-shadow: 0 0 8px rgba(209, 96, 96, 0.6);
 }
+
+/* --- Global Cyberpunk Motion System --- */
+
+/* Sequential Reveal Animations */
+@keyframes draw-border {
+  0% { clip-path: inset(0 100% 100% 0); opacity: 0; }
+  25% { clip-path: inset(0 0 100% 0); opacity: 1; }
+  50% { clip-path: inset(0 0 0 0); }
+  100% { clip-path: inset(0 0 0 0); opacity: 1; }
+}
+
+@keyframes reveal-text {
+  from { clip-path: inset(0 100% 0 0); transform: translateX(-10px); }
+  to { clip-path: inset(0 0 0 0); transform: translateX(0); }
+}
+
+@keyframes pop-in {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Glitch & Stagger Animations (for Terminal lines and Widgets) */
+@keyframes cyber-glitch {
+  0% { opacity: 0; transform: translateX(-5px); filter: brightness(2); }
+  50% { opacity: 0.8; transform: translateX(2px); filter: brightness(1.2); }
+  100% { opacity: 1; transform: translateX(0); filter: none; }
+}
+
+@keyframes stagger-reveal {
+  from { opacity: 0; transform: translateY(10px) skewX(-5deg); }
+  to { opacity: 1; transform: translateY(0) skewX(0); }
+}
+
+@keyframes scale-y {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+/* Utility Classes */
+.animate-draw-border { animation: draw-border 0.8s cubic-bezier(0.4, 0, 0.2, 1) both; }
+.animate-reveal-text { animation: reveal-text 0.5s cubic-bezier(0.4, 0, 0.2, 1) both; }
+.animate-scale-y { animation: scale-y 0.3s ease-out both; transform-origin: bottom; }
+.animate-pop-in { animation: pop-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+.animate-fade-in { animation: fade-in 0.5s ease-out both; }
+.cyber-glitch-in { animation: cyber-glitch 0.25s ease-out both; }
+.stagger-load { animation: stagger-reveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+

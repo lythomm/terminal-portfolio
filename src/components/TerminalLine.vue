@@ -1,6 +1,7 @@
 <script setup>
 import LineSkills from "./lines/LineSkills.vue";
 import LineProjectDetail from "./lines/LineProjectDetail.vue";
+import LineAbout from "./lines/LineAbout.vue";
 
 defineProps({
   line: {
@@ -28,6 +29,13 @@ defineEmits(["run-command"]);
       {{ line.content }}
     </div>
 
+    <!-- About Multi-Variant -->
+    <LineAbout
+      v-else-if="line.type === 'about-variant'"
+      :variant="line.variant"
+      :data="line.data"
+    />
+
     <!-- ASCII -->
     <pre
       v-else-if="line.type === 'ascii'"
@@ -39,6 +47,15 @@ defineEmits(["run-command"]);
     <!-- Error -->
     <div v-else-if="line.type === 'error'" class="text-err term-main">
       {{ line.content }}
+    </div>
+    
+    <!-- Image / Profile Picture -->
+    <div v-else-if="line.type === 'image'" class="mb-6 mt-2">
+      <img 
+        :src="line.src" 
+        alt="Profile" 
+        class="w-48 h-48 object-cover border-2 border-accent/30 rounded-sm shadow-[0_0_15px_rgba(74,222,128,0.2)] grayscale hover:grayscale-0 transition-all duration-500"
+      />
     </div>
 
     <!-- Project Header -->
@@ -166,10 +183,7 @@ defineEmits(["run-command"]);
     <!-- Simple Text -->
     <div
       v-else-if="line.type === 'text'"
-      :class="[
-        line.class || 'text-fg/90 term-main leading-relaxed',
-        'max-w-[450px]',
-      ]"
+      :class="[line.class || 'text-fg/90 term-main leading-relaxed']"
     >
       {{ line.content }}
     </div>
