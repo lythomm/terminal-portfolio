@@ -44,7 +44,7 @@ const skillLines = [
 
 <template>
   <div
-    class="hidden lg:flex flex-col shrink-0 h-full border-l border-border px-5 space-y-6 overflow-y-auto side-panel bg-transparent"
+    class="hidden lg:flex flex-col shrink-0 h-full border-l border-border px-5 pt-3 space-y-6 overflow-y-auto side-panel bg-transparent"
   >
     <!-- Panel Header -->
     <div

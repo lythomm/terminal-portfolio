@@ -376,7 +376,7 @@ export const commandRegistry = [
         {
           type: "text",
           content: isLowPerf
-            ? "Distorsion d'écran désactivée. (Flicker & Scanlines toujours actifs)"
+            ? "Distorsion d'écran désactivée. (Flicker, Scanlines & Noise actifs)"
             : "Distorsion haute fidélité activée. (GPU recommandé)",
         },
       ];

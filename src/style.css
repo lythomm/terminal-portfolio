@@ -21,20 +21,42 @@
   --animate-slide-in-left: slide-in-left 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 
   @keyframes fade-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
   @keyframes slide-in-top {
-    from { transform: translateY(-20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+    from {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
   }
   @keyframes slide-in-bottom {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
   }
   @keyframes slide-in-left {
-    from { transform: translateX(-20px); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
+    from {
+      transform: translateX(-20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
   }
   @keyframes blink {
     0%,
@@ -114,6 +136,54 @@
   }
 }
 
+/* Signal Jitter (Rare horizontal jump) */
+@keyframes jitter {
+  0% {
+    transform: translate(0, 0);
+  }
+  0.5% {
+    transform: translate(1px, 0);
+  }
+  1% {
+    transform: translate(0, 0);
+  }
+  1.5% {
+    transform: translate(-1px, 0.5px);
+  }
+  2% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+/* Dynamic Noise (Animated grain) */
+@keyframes dynamic-noise {
+  0%,
+  100% {
+    background-position: 0 0;
+  }
+  25% {
+    background-position: 10px 20px;
+  }
+  50% {
+    background-position: -20px 10px;
+  }
+  75% {
+    background-position: 15px -15px;
+  }
+}
+
+@keyframes scanline-move {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 20px;
+  }
+}
+
 body {
   background-color: #000;
   font-family: "Geist Mono", "Courier New", monospace;
@@ -127,15 +197,31 @@ body {
 }
 
 #app {
-  background-color: var(--bg);
-  color: var(--fg);
   height: 100vh;
   width: 100vw;
   position: relative;
-  overflow-x: hidden;
-  overflow-y: hidden;
-  animation: flicker 0.15s infinite;
-  filter: contrast(1.05) brightness(1.15) saturate(1.2) url(#crt-bulge);
+  overflow: hidden;
+  background-color: #000;
+}
+
+.terminal-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 4rem 6rem;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  background-color: var(--bg);
+  color: var(--fg);
+
+  /* CRT Controls via CSS Variables */
+  animation: var(--flicker-anim, none), var(--jitter-anim, none);
+
+  /* Filter stack with togglable components */
+  filter: contrast(1.05) brightness(1.1) saturate(1.1)
+    var(--distortion-filter, brightness(1));
+
   box-shadow:
     inset 0 0 60px rgba(0, 0, 0, 0.45),
     0 0 20px rgba(0, 0, 0, 0.3);
@@ -146,40 +232,52 @@ body {
     -1px 0 0 rgba(0, 0, 255, 0.05);
 }
 
-/* Low Performance Mode - Disables ONLY the heavy SVG distortion filter */
-#app.low-perf {
-  /* We keep the color adjustments but remove the expensive url(#crt-bulge) */
-  filter: contrast(1.05) brightness(1.15) saturate(1.2);
+/* CRT Toggle Classes */
+.terminal-container.crt-flicker {
+  --flicker-anim: flicker 0.15s infinite;
+}
+.terminal-container.crt-jitter {
+  --jitter-anim: jitter 12s step-end infinite;
 }
 
-/* Moving Scanlines */
-@keyframes scanline {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(100%);
-  }
+.terminal-container.crt-distortion {
+  --distortion-filter: url(#crt-bulge);
 }
 
-#app::before {
+/* Performance Mode (ECO) */
+#app.low-perf .terminal-container {
+  --distortion-filter: brightness(1) !important;
+}
+
+
+
+/* Layer 1: Scanlines */
+.terminal-container::before {
   content: " ";
   display: block;
   position: absolute;
-  top: -100%;
-  left: 0;
-  bottom: -100%;
-  right: 0;
-  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
-  background-size: 100% 4px;
+  inset: 0;
+  background:
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%),
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.15) 0px,
+      rgba(0, 0, 0, 0.15) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+  background-size: 100% 2px;
   z-index: 100;
   pointer-events: none;
-  animation: scanline 10s linear infinite;
-  opacity: 0.1;
+  animation: scanline-move 10s linear infinite;
+  display: none;
+}
+.terminal-container.crt-scanlines::before {
+  display: block;
 }
 
-/* Static RGB/Grain overlay */
-#app::after {
+/* Layer 2: Aperture Grille & Vignette */
+.terminal-container::after {
   content: " ";
   display: block;
   position: absolute;
@@ -187,26 +285,31 @@ body {
   background:
     linear-gradient(
       90deg,
-      rgba(255, 0, 0, 0.02),
-      rgba(0, 255, 0, 0.01),
-      rgba(0, 0, 255, 0.02)
+      rgba(255, 0, 0, 0.015) 0%,
+      rgba(0, 255, 0, 0.015) 33%,
+      rgba(0, 0, 255, 0.015) 66%
     ),
-    radial-gradient(circle, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.5) 100%);
-  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.5);
+    radial-gradient(circle, rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.4) 100%);
+  background-size:
+    3px 100%,
+    100% 100%;
   z-index: 99;
   pointer-events: none;
+  display: none;
+}
+.terminal-container.crt-grille::after {
+  display: block;
 }
 
-.terminal-container {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  /* Balanced padding for better centering */
-  padding: 4rem 6rem;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  position: relative;
-  z-index: 1;
+/* Dedicated Noise Layer */
+.crt-noise-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.035;
+  pointer-events: none;
+  z-index: 98;
+  animation: dynamic-noise 0.2s steps(4) infinite;
 }
 
 .terminal-content {
@@ -251,20 +354,7 @@ body {
   display: none;
 }
 
-.terminal-container::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 0.1) 0px,
-    rgba(0, 0, 0, 0.1) 1px,
-    transparent 1px,
-    transparent 2px
-  );
-  pointer-events: none;
-  z-index: 10;
-}
+/* Dynamic Noise Overlay */
 
 .prompt-accent {
   color: var(--accent);
@@ -362,62 +452,145 @@ body {
 
 /* Sequential Reveal Animations */
 @keyframes draw-border {
-  0% { clip-path: inset(0 100% 100% 0); opacity: 0; }
-  25% { clip-path: inset(0 0 100% 0); opacity: 1; }
-  50% { clip-path: inset(0 0 0 0); }
-  100% { clip-path: inset(0 0 0 0); opacity: 1; }
+  0% {
+    clip-path: inset(0 100% 100% 0);
+    opacity: 0;
+  }
+  25% {
+    clip-path: inset(0 0 100% 0);
+    opacity: 1;
+  }
+  50% {
+    clip-path: inset(0 0 0 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
 }
 
 @keyframes reveal-text {
-  from { clip-path: inset(0 100% 0 0); transform: translateX(-10px); opacity: 0; }
-  to { clip-path: inset(0 0 0 0); transform: translateX(0); opacity: 1; }
+  from {
+    clip-path: inset(0 100% 0 0);
+    transform: translateX(-10px);
+    opacity: 0;
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 @keyframes pop-in {
-  0% { transform: scale(0.8); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 @keyframes digital-stamp {
-  0% { transform: scale(1.3) rotate(12deg); opacity: 0; filter: brightness(3) contrast(2); }
-  10% { opacity: 1; filter: brightness(1) contrast(1); }
-  20% { filter: brightness(2); transform: scale(1.05) rotate(13deg); }
-  30% { filter: brightness(1); transform: scale(1) rotate(12deg); }
-  100% { opacity: 1; transform: scale(1) rotate(12deg); }
+  0% {
+    transform: scale(1.3) rotate(12deg);
+    opacity: 0;
+    filter: brightness(3) contrast(2);
+  }
+  10% {
+    opacity: 1;
+    filter: brightness(1) contrast(1);
+  }
+  20% {
+    filter: brightness(2);
+    transform: scale(1.05) rotate(13deg);
+  }
+  30% {
+    filter: brightness(1);
+    transform: scale(1) rotate(12deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(12deg);
+  }
 }
 
 @keyframes fade-in {
-  from { opacity: 0; transform: translateY(5px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Glitch & Stagger Animations (for Terminal lines and Widgets) */
 @keyframes cyber-glitch {
-  0% { opacity: 0; transform: translateX(-5px); filter: brightness(2); }
-  50% { opacity: 0.8; transform: translateX(2px); filter: brightness(1.2); }
-  100% { opacity: 1; transform: translateX(0); filter: none; }
+  0% {
+    opacity: 0;
+    transform: translateX(-5px);
+    filter: brightness(2);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateX(2px);
+    filter: brightness(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+    filter: none;
+  }
 }
 
 @keyframes stagger-reveal {
-  from { opacity: 0; transform: translateY(10px) skewX(-5deg); }
-  to { opacity: 1; transform: translateY(0) skewX(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px) skewX(-5deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) skewX(0);
+  }
 }
 
 @keyframes scale-y {
-  from { transform: scaleY(0); }
-  to { transform: scaleY(1); }
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
 }
 
 /* Utility Classes */
-.animate-draw-border { animation: draw-border 0.8s cubic-bezier(0.4, 0, 0.2, 1) both; }
-.animate-reveal-text { animation: reveal-text 0.5s cubic-bezier(0.4, 0, 0.2, 1) both; }
-.animate-scale-y { animation: scale-y 0.3s ease-out both; transform-origin: bottom; }
-.animate-pop-in { animation: pop-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
-.animate-fade-in { animation: fade-in 0.5s ease-out both; }
-.animate-stamp { 
-  animation: digital-stamp 0.4s ease-out both; 
+.animate-draw-border {
+  animation: draw-border 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+.animate-reveal-text {
+  animation: reveal-text 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+.animate-scale-y {
+  animation: scale-y 0.3s ease-out both;
+  transform-origin: bottom;
+}
+.animate-pop-in {
+  animation: pop-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.animate-fade-in {
+  animation: fade-in 0.5s ease-out both;
+}
+.animate-stamp {
+  animation: digital-stamp 0.4s ease-out both;
   transform-origin: center;
 }
-.cyber-glitch-in { animation: cyber-glitch 0.25s ease-out both; }
-.stagger-load { animation: stagger-reveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
-
+.cyber-glitch-in {
+  animation: cyber-glitch 0.25s ease-out both;
+}
+.stagger-load {
+  animation: stagger-reveal 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}

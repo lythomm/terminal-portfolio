@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick } from "vue";
+import { ref, onMounted, onUnmounted, nextTick, computed } from "vue";
 import BootScreen from "./components/BootScreen.vue";
 import SystemBanner from "./components/SystemBanner.vue";
 import TerminalLine from "./components/TerminalLine.vue";
@@ -16,6 +16,8 @@ const isOff = ref(true);
 const isBooting = ref(true);
 const hasPoweredOn = ref(false);
 const isMobile = ref(false);
+
+
 
 // Refs
 const inputRef = ref(null);
@@ -90,17 +92,20 @@ const onBootComplete = () => {
 
   <div
     v-else
-    class="terminal-container selection:bg-accent selection:text-bg"
+    class="terminal-container selection:bg-accent selection:text-bg crt-flicker crt-jitter crt-distortion crt-grille crt-scanlines"
     @click="focusInput"
   >
+    <!-- CRT Noise Layer (Global) -->
+    <div class="crt-noise-overlay"></div>
+
     <!-- Power Button (Visible only when system is OFF) -->
     <PowerButton v-if="isOff" @power-on="handlePowerOn" />
 
-    <!-- Screen Content (Boot Sequence & Terminal) -->
+    <!-- Screen Content Wrapper (The Layer that receives CRT filters) -->
     <div
       v-if="!isOff"
-      class="h-full w-full flex flex-col"
-      :class="[hasPoweredOn ? 'power-on-anim' : 'opacity-0']"
+      class="h-full w-full flex flex-col crt-screen-content"
+      :class="hasPoweredOn ? 'power-on-anim' : 'opacity-0'"
     >
       <!-- Top Banner -->
       <SystemBanner v-if="!isBooting" :uptime="uptime" />
@@ -126,7 +131,6 @@ const onBootComplete = () => {
                 />
               </div>
             </div>
-
             <!-- Persistent Footer -->
             <TerminalInput
               ref="inputRef"
