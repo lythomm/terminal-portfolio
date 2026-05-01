@@ -1,5 +1,5 @@
 import moiImage from "../assets/moi.png";
-import aliciaPreview from "../assets/projects/alicia_preview.png";
+import aliciaPreview from "../assets/projects/aliciaambroise/aliciaambroise-hero.png";
 
 export const projectDetails = {
   aliciaambroise: {
