@@ -2,6 +2,7 @@
 import LineSkills from "./lines/LineSkills.vue";
 import LineProjectDetail from "./lines/LineProjectDetail.vue";
 import LineAbout from "./lines/LineAbout.vue";
+import LineExperience from "./lines/LineExperience.vue";
 
 defineProps({
   line: {
@@ -36,6 +37,12 @@ defineEmits(["run-command"]);
       :data="line.data"
     />
 
+    <!-- Experience Logs -->
+    <LineExperience
+      v-else-if="line.type === 'experience-logs'"
+      :data="line.data"
+    />
+
     <!-- ASCII -->
     <pre
       v-else-if="line.type === 'ascii'"
@@ -48,12 +55,12 @@ defineEmits(["run-command"]);
     <div v-else-if="line.type === 'error'" class="text-err term-main">
       {{ line.content }}
     </div>
-    
+
     <!-- Image / Profile Picture -->
     <div v-else-if="line.type === 'image'" class="mb-6 mt-2">
-      <img 
-        :src="line.src" 
-        alt="Profile" 
+      <img
+        :src="line.src"
+        alt="Profile"
         class="w-48 h-48 object-cover border-2 border-accent/30 rounded-sm shadow-[0_0_15px_rgba(74,222,128,0.2)] grayscale hover:grayscale-0 transition-all duration-500"
       />
     </div>

@@ -17,8 +17,6 @@ const isBooting = ref(true);
 const hasPoweredOn = ref(false);
 const isMobile = ref(false);
 
-
-
 // Refs
 const inputRef = ref(null);
 const containerRef = ref(null);
@@ -71,7 +69,7 @@ const handlePowerOn = () => {
 
   // Audio Playback
   const audio = new Audio(pcStartupSound);
-  audio.volume = 0.7;
+  audio.volume = 1;
   audio.play().catch((e) => console.log("Audio play blocked:", e));
 };
 
@@ -92,11 +90,14 @@ const onBootComplete = () => {
 
   <div
     v-else
-    class="terminal-container selection:bg-accent selection:text-bg crt-flicker crt-jitter crt-distortion crt-grille crt-scanlines"
+    class="terminal-container selection:bg-accent selection:text-bg crt-distortion"
+    :class="{
+      'crt-flicker crt-jitter crt-grille crt-scanlines': !isOff,
+    }"
     @click="focusInput"
   >
-    <!-- CRT Noise Layer (Global) -->
-    <div class="crt-noise-overlay"></div>
+    <!-- CRT Noise Layer (Activated on Power On) -->
+    <div v-if="!isOff" class="crt-noise-overlay"></div>
 
     <!-- Power Button (Visible only when system is OFF) -->
     <PowerButton v-if="isOff" @power-on="handlePowerOn" />

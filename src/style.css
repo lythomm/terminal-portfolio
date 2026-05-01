@@ -208,7 +208,7 @@ body {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  padding: 4rem 6rem;
+  padding: 2rem 6rem;
   overflow: hidden;
   position: relative;
   z-index: 1;
@@ -248,8 +248,6 @@ body {
 #app.low-perf .terminal-container {
   --distortion-filter: brightness(1) !important;
 }
-
-
 
 /* Layer 1: Scanlines */
 .terminal-container::before {
@@ -576,7 +574,7 @@ body {
 }
 .animate-scale-y {
   animation: scale-y 0.3s ease-out both;
-  transform-origin: bottom;
+  transform-origin: top;
 }
 .animate-pop-in {
   animation: pop-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;

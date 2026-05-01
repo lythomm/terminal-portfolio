@@ -106,10 +106,10 @@ onMounted(() => {
         <!-- Contact Item -->
         <div
           v-else-if="line.type === 'contact-row'"
-          class="grid grid-cols-[100px_1fr] gap-3 items-center group/contact py-0.5"
+          class="flex flex-col group/contact py-2"
         >
           <span
-            class="text-dim uppercase tracking-tighter text-sm font-bold opacity-70"
+            class="text-dim uppercase tracking-tighter term-label font-bold opacity-70 mb-1"
           >
             <GlitchText
               :text="line.label"

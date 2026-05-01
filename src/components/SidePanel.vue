@@ -78,23 +78,26 @@ const skillLines = [
       :delay="2300"
     />
 
-    <!-- Skills Widget -->
-    <InfoWidget
-      title="SKILLS.md"
-      colorClass="border-cyan/40"
-      titleBgClass="bg-cyan"
-      :lines="skillLines"
-      :delay="2600"
-    />
+    <!-- Skills & Contact Grouped Side-by-Side -->
+    <div class="grid grid-cols-2 gap-4">
+      <InfoWidget
+        title="SKILLS.md"
+        colorClass="border-cyan/40"
+        titleBgClass="bg-cyan"
+        :lines="skillLines"
+        :delay="2600"
+        class="mb-0!"
+      />
 
-    <!-- Contact Widget -->
-    <InfoWidget
-      title="CONTACT_nodes"
-      colorClass="border-err/40"
-      titleBgClass="bg-err"
-      :lines="contactLines"
-      :delay="2900"
-    />
+      <InfoWidget
+        title="CONTACT_nodes"
+        colorClass="border-err/40"
+        titleBgClass="bg-err"
+        :lines="contactLines"
+        :delay="2700"
+        class="mb-0!"
+      />
+    </div>
 
     <!-- Decorative bottom text -->
     <div

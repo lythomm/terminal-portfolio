@@ -1,5 +1,9 @@
 import { ref, computed, nextTick, watch } from "vue";
-import { commandRegistry, getCommand, welcomeMessage } from "../utils/terminalCommands";
+import {
+  commandRegistry,
+  getCommand,
+  welcomeMessage,
+} from "../utils/terminalCommands";
 
 export function useTerminal(containerRef, inputRef) {
   // State
@@ -10,7 +14,7 @@ export function useTerminal(containerRef, inputRef) {
   const activeHelp = ref(null);
   const uptime = ref("00d 00h 00m 00s");
   const systemStartTime = ref(new Date(2020, 8, 28, 12, 0, 0).getTime());
-  
+
   // Max lines to keep in memory for performance
   const MAX_LINES = 100;
 
@@ -31,7 +35,7 @@ export function useTerminal(containerRef, inputRef) {
    */
   const pushLine = (line) => {
     terminalLines.value.push(line);
-    
+
     // Cap lines
     if (terminalLines.value.length > MAX_LINES) {
       terminalLines.value = terminalLines.value.slice(-MAX_LINES);
@@ -62,7 +66,7 @@ export function useTerminal(containerRef, inputRef) {
 
     // Log command in terminal
     pushLine({ type: "prompt", content: input });
-    
+
     // Add to history
     if (commandHistory.value[commandHistory.value.length - 1] !== input) {
       commandHistory.value.push(input);

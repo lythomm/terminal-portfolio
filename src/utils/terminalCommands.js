@@ -143,97 +143,65 @@ export const commandRegistry = [
   },
   {
     name: "parcours",
-    desc: "mon parcours professionnel",
-    handler: () => [
-      { type: "header", content: "// expérience professionnelle" },
-      {
-        type: "experience",
-        role: "Développeur Fullstack",
-        company: "BedBoat",
-        url: "https://bedboat.fr/",
-        period: "2022 - 2026",
-      },
-      {
-        type: "desc",
-        content:
-          "Audit technique de l'existant et restructuration de la plateforme pour améliorer la performance, la scalabilité et la maintenance du code",
-      },
-      {
-        type: "desc",
-        content:
-          "Introduction de la culture Agile au sein de l'équipe, mise en place de rituels (Sprints, Daily, Retrospectives) là où aucun cadre n'existait",
-      },
-      {
-        type: "desc",
-        content:
-          "Développement du système de réservation et intégration du système de paiement Stripe",
-      },
-      {
-        type: "desc",
-        content: "Optimisation des processus internes via automatisations Make",
-      },
-      { type: "text", content: "" },
-      {
-        type: "experience",
-        role: "Développeur Fullstack",
-        company: "iologo",
-        url: "https://www.iologo.io/",
-        period: "2021 - 2022",
-      },
-      {
-        type: "desc",
-        content:
-          "Implémentation de fonctionnalités de bout en bout, de l’interface utilisateur à la logique métier et l'API",
-      },
-      {
-        type: "desc",
-        content:
-          "Participation active à la transition technique et à l'unification des outils suite à la fusion avec Lexidia",
-      },
-      {
-        type: "desc",
-        content:
-          "Création d'un back-office permettant aux équipes non-techniques (support, marketing) de gérer et d'éditer les données de la base en toute autonomie et sécurité",
-      },
-      { type: "text", content: "" },
-      {
-        type: "experience",
-        role: "Développeur Frontend",
-        company: "Lexidia",
-        url: "https://www.lexidia.org/",
-        period: "2020 - 2021",
-      },
-      {
-        type: "desc",
-        content:
-          "Conception de l'interface utilisateur pour une application d'aide à l'orthophonie basée sur la sémiophonie",
-      },
-      {
-        type: "desc",
-        content:
-          "Travail en lien étroit avec les professionnels de santé pour traduire leurs besoins cliniques en solutions techniques concrètes",
-      },
+    desc: "mon parcours professionnel (comparaison des variantes)",
+    handler: () => {
+      const expData = {
+        jobs: [
+          {
+            role: "Développeur Fullstack",
+            company: "BedBoat",
+            url: "https://bedboat.fr/",
+            period: "2022 - 2026",
+            descriptions: [
+              "Audit technique et restructuration de la plateforme pour la performance et scalabilité",
+              "Introduction de la culture Agile (Sprints, Daily, Retrospectives)",
+              "Développement du système de réservation et intégration Stripe",
+              "Optimisation des processus via automatisations Make",
+            ],
+          },
+          {
+            role: "Développeur Fullstack",
+            company: "iologo",
+            url: "https://www.iologo.io/",
+            period: "2021 - 2022",
+            descriptions: [
+              "Implémentation de fonctionnalités de bout en bout (UI, Logique, API)",
+              "Participation active à la transition technique suite à la fusion Lexidia",
+              "Création d'un back-office autonome pour les équipes non-techniques",
+            ],
+          },
+          {
+            role: "Développeur Frontend",
+            company: "Lexidia",
+            url: "https://www.lexidia.org/",
+            period: "2020 - 2021",
+            descriptions: [
+              "Conception UI pour une application d'aide à l'orthophonie",
+              "Traduction des besoins cliniques en solutions techniques",
+            ],
+          },
+        ],
+        education: [
+          {
+            role: "Ingénieur spécialité AISL (Architecture et Ingénierie des Systèmes et Logiciels)",
+            company: "IPST-CNAM (Toulouse)",
+            period: "2021 - 2023",
+          },
+          {
+            role: "Licence Informatique",
+            company: "IPST-CNAM (Toulouse)",
+            period: "2020 - 2021",
+          },
+          {
+            role: "DUT Informatique",
+            company: "IUT Informatique Paul Sabatier (Toulouse)",
+            period: "2018 - 2020",
+          },
+        ],
+      };
 
-      { type: "header", content: "// éducation" },
-      {
-        type: "experience",
-        role: "Ingénieur spécialité AISL",
-        company: "IPST-CNAM (Toulouse)",
-        period: "2021 - 2023",
-      },
-      {
-        type: "experience",
-        role: "Licence Informatique",
-        company: "IPST-CNAM (Toulouse)",
-        period: "2020 - 2021",
-      },
-      {
-        type: "experience",
-        role: "DUT Informatique",
-        company: "IUT Informatique Paul Sabatier (Toulouse)",
-        period: "2018 - 2020",
-      },
-    ],
+      return [{ type: "experience-logs", data: expData }];
+    },
   },
   {
     name: "competences",
@@ -321,6 +289,12 @@ export const commandRegistry = [
         label: "LINKEDIN",
         content: "@thomas-ly",
         url: "https://www.linkedin.com/in/thomas-ly/",
+      },
+      {
+        type: "contact-row",
+        label: "TÉLÉPHONE",
+        content: "06 11 59 76 27",
+        url: "tel:+33637413634",
       },
       {
         type: "text",

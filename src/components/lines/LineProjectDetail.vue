@@ -28,13 +28,13 @@ defineProps({
     >
       <div>
         <div
-          class="text-[10px] uppercase tracking-[0.4em] text-accent/60 mb-1 font-mono animate-reveal-text"
+          class="term-small uppercase tracking-[0.4em] text-accent/60 mb-1 font-mono animate-reveal-text"
           style="animation-delay: 600ms"
         >
           Project_Registry_Entry
         </div>
         <h3
-          class="text-4xl font-black text-fg tracking-tighter uppercase italic animate-reveal-text"
+          class="text-4xl font-black text-fg tracking-tighter uppercase animate-reveal-text"
           style="animation-delay: 700ms"
         >
           {{ project.name }}
@@ -44,7 +44,7 @@ defineProps({
         class="text-right opacity-0 animate-fade-in"
         style="animation-delay: 900ms"
       >
-        <div class="text-[10px] uppercase tracking-widest text-dim mb-1">
+        <div class="term-small uppercase tracking-widest text-dim mb-1">
           System_Status
         </div>
         <span
@@ -57,11 +57,11 @@ defineProps({
 
     <!-- Description -->
     <div
-      class="mb-10 max-w-3xl opacity-0 animate-fade-in"
+      class="mb-10 opacity-0 animate-fade-in"
       style="animation-delay: 1000ms"
     >
       <div
-        class="text-[10px] uppercase tracking-[0.2em] text-accent/40 mb-3 block font-mono"
+        class="term-small uppercase tracking-[0.2em] text-accent/40 mb-3 block font-mono"
       >
         // DESCRIPTION_EXEC_SUMMARY
       </div>
@@ -78,8 +78,7 @@ defineProps({
       <div class="space-y-6">
         <div class="flex items-center space-x-3">
           <span class="w-3 h-3 bg-accent animate-pulse"></span>
-          <span
-            class="text-[11px] uppercase tracking-[0.2em] font-bold text-dim"
+          <span class="term-small uppercase tracking-[0.2em] font-bold text-dim"
             >Tech_Capabilities_Modules</span
           >
         </div>
@@ -87,7 +86,7 @@ defineProps({
           <span
             v-for="(t, idx) in project.tech"
             :key="t"
-            class="px-3 py-1 bg-bg border border-accent/20 text-accent text-xs font-mono hover:bg-accent hover:text-bg transition-all duration-300 cursor-default uppercase tracking-wider opacity-0 animate-pop-in"
+            class="px-3 py-1 bg-bg border border-accent/20 text-accent term-small font-mono hover:bg-accent hover:text-bg transition-all duration-300 cursor-default uppercase tracking-wider opacity-0 animate-pop-in"
             :style="{ animationDelay: 1300 + idx * 100 + 'ms' }"
           >
             {{ t }}
