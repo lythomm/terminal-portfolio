@@ -30,15 +30,25 @@ const contactLines = computed(() =>
 const skillLines = [
   { type: "text", content: "FRONTEND" },
   { type: "text", content: "├── VUE.JS / VITE", class: "opacity-70 ml-2" },
-  { type: "text", content: "├── REACT / NEXT.JS", class: "opacity-70 ml-2" },
-  { type: "text", content: "└── TAILWIND CSS V4", class: "opacity-70 ml-2" },
+  { type: "text", content: "├── TAILWIND CSS V4", class: "opacity-70 ml-2" },
+  { type: "text", content: "└── REACT / NEXT.JS", class: "opacity-70 ml-2" },
   { type: "text", content: "BACKEND" },
   { type: "text", content: "├── NODE.JS / EXPRESS", class: "opacity-70 ml-2" },
   { type: "text", content: "├── POSTGRESQL / SQL", class: "opacity-70 ml-2" },
-  { type: "text", content: "└── SUPABASE / AUTH", class: "opacity-70 ml-2" },
-  { type: "text", content: "AUTOMATION" },
-  { type: "text", content: "├── N8N WORKFLOWS", class: "opacity-70 ml-2" },
-  { type: "text", content: "└── MAKE / ZAPIER", class: "opacity-70 ml-2" },
+  { type: "text", content: "├── SUPABASE / AUTH", class: "opacity-70 ml-2" },
+  { type: "text", content: "└── REST APIS", class: "opacity-70 ml-2" },
+  { type: "text", content: "METHODS & SOFT SKILLS" },
+  { type: "text", content: "├── MÉTHODE AGILE", class: "opacity-70 ml-2" },
+  {
+    type: "text",
+    content: "├── RÉSOLUTION DE PROBLÈMES",
+    class: "opacity-70 ml-2",
+  },
+  { type: "text", content: "└── COMMUNICATION", class: "opacity-70 ml-2" },
+  { type: "text", content: "TOOLS" },
+  { type: "text", content: "├── N8N", class: "opacity-70 ml-2" },
+  { type: "text", content: "├── MAKE", class: "opacity-70 ml-2" },
+  { type: "text", content: "└── NOTION", class: "opacity-70 ml-2" },
 ];
 </script>
 
@@ -78,30 +88,20 @@ const skillLines = [
       :delay="2300"
     />
 
-    <!-- Skills & Contact Grouped Side-by-Side -->
-    <div class="grid grid-cols-2 gap-4">
-      <InfoWidget
-        title="SKILLS.md"
-        colorClass="border-cyan/40"
-        titleBgClass="bg-cyan"
-        :lines="skillLines"
-        :delay="2600"
-        class="mb-0!"
-      />
+    <!-- Contact -->
 
-      <InfoWidget
-        title="CONTACT_nodes"
-        colorClass="border-err/40"
-        titleBgClass="bg-err"
-        :lines="contactLines"
-        :delay="2700"
-        class="mb-0!"
-      />
-    </div>
+    <InfoWidget
+      title="CONTACT_nodes"
+      colorClass="border-err/40"
+      titleBgClass="bg-err"
+      :lines="contactLines"
+      :delay="2700"
+      class="mb-0!"
+    />
 
     <!-- Decorative bottom text -->
     <div
-      class="mt-auto opacity-20 term-small font-mono leading-tight uppercase tracking-widest stagger-load"
+      class="mt-8 opacity-20 term-small font-mono leading-tight uppercase tracking-widest stagger-load"
       style="animation-delay: 3200ms"
     >
       Core_Net // Thomas_OS<br />

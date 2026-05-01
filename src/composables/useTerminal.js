@@ -20,9 +20,11 @@ export function useTerminal(containerRef, inputRef) {
 
   const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+  const isAutoScrollEnabled = ref(true);
+
   const scrollToBottom = async () => {
     await nextTick();
-    if (containerRef.value) {
+    if (containerRef.value && isAutoScrollEnabled.value) {
       containerRef.value.scrollTop = containerRef.value.scrollHeight;
     }
   };
@@ -64,6 +66,21 @@ export function useTerminal(containerRef, inputRef) {
     const [cmdName, ...args] = input.split(/\s+/);
     const cmdNameLower = cmdName.toLowerCase();
 
+    const cmd = getCommand(cmdNameLower);
+    const isOuvrir = cmdNameLower === "ouvrir";
+    
+    // Manage auto-scroll and terminal clear
+    if (isOuvrir) {
+      terminalLines.value = [];
+      isAutoScrollEnabled.value = false;
+      await nextTick();
+      if (containerRef.value) {
+        containerRef.value.scrollTop = 0;
+      }
+    } else {
+      isAutoScrollEnabled.value = true;
+    }
+
     // Log command in terminal
     pushLine({ type: "prompt", content: input });
 
@@ -72,8 +89,6 @@ export function useTerminal(containerRef, inputRef) {
       commandHistory.value.push(input);
     }
     historyIndex.value = -1;
-
-    const cmd = getCommand(cmdNameLower);
 
     if (cmd) {
       // Clear previous specific help if not aide

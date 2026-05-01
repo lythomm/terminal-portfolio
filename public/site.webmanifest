@@ -1,0 +1,15 @@
+{
+  "name": "Thomas | Portfolio",
+  "short_name": "Thomas_OS",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "theme_color": "#0d1117",
+  "background_color": "#0d1117",
+  "display": "standalone"
+}

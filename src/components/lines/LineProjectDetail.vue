@@ -5,11 +5,13 @@ defineProps({
     required: true,
   },
 });
+
+defineEmits(["run-command"]);
 </script>
 
 <template>
   <div
-    class="my-10 border border-accent/30 bg-accent/5 p-8 relative overflow-hidden animate-draw-border"
+    class="border border-accent/30 bg-accent/5 p-8 relative overflow-hidden animate-draw-border"
   >
     <!-- Coins décoratifs (Retro-Tech corners) -->
     <div
@@ -55,25 +57,57 @@ defineProps({
       </div>
     </div>
 
-    <!-- Description -->
+    <!-- Sections dynamiques -->
     <div
-      class="mb-10 opacity-0 animate-fade-in"
-      style="animation-delay: 1000ms"
+      v-for="(section, sIdx) in project.sections"
+      :key="sIdx"
+      class="mb-12 opacity-0 animate-fade-in"
+      :style="{ animationDelay: 800 + sIdx * 200 + 'ms' }"
     >
       <div
         class="term-small uppercase tracking-[0.2em] text-accent/40 mb-3 block font-mono"
       >
-        // DESCRIPTION_EXEC_SUMMARY
+        // {{ section.label }}
       </div>
-      <p class="text-fg/90 text-xl leading-relaxed font-medium">
-        {{ project.description }}
-      </p>
+
+      <div
+        v-if="section.type === 'text'"
+        class="text-fg/90 text-xl leading-relaxed font-medium"
+      >
+        {{ section.content }}
+      </div>
+
+      <ul v-else-if="section.type === 'list'" class="space-y-3">
+        <li
+          v-for="(item, iIdx) in section.content"
+          :key="iIdx"
+          class="flex items-start space-x-4"
+        >
+          <span class="text-accent mt-1.5 text-xs">>></span>
+          <span class="text-fg/80 text-lg leading-relaxed">{{ item }}</span>
+        </li>
+      </ul>
+
+      <div
+        v-else-if="section.type === 'image'"
+        class="mt-6 relative group/img overflow-hidden"
+      >
+        <img
+          :src="section.content"
+          class="w-full h-auto grayscale hover:grayscale-0 transition-all duration-700"
+        />
+        <div
+          class="absolute inset-0 border-2 border-accent/0 group-hover/img:border-accent/40 transition-all duration-500 pointer-events-none"
+        ></div>
+      </div>
     </div>
 
     <!-- Grid d'informations techniques -->
     <div
       class="grid grid-cols-1 md:grid-cols-[1.5fr_1fr] gap-12 border-t border-accent/10 pt-8 opacity-0 animate-fade-in"
-      style="animation-delay: 1200ms"
+      :style="{
+        animationDelay: 1000 + (project.sections?.length || 0) * 200 + 'ms',
+      }"
     >
       <div class="space-y-6">
         <div class="flex items-center space-x-3">
@@ -87,7 +121,10 @@ defineProps({
             v-for="(t, idx) in project.tech"
             :key="t"
             class="px-3 py-1 bg-bg border border-accent/20 text-accent term-small font-mono hover:bg-accent hover:text-bg transition-all duration-300 cursor-default uppercase tracking-wider opacity-0 animate-pop-in"
-            :style="{ animationDelay: 1300 + idx * 100 + 'ms' }"
+            :style="{
+              animationDelay:
+                1200 + (project.sections?.length || 0) * 200 + idx * 100 + 'ms',
+            }"
           >
             {{ t }}
           </span>
@@ -95,8 +132,11 @@ defineProps({
       </div>
 
       <div
+        v-if="project.role"
         class="bg-accent/10 p-6 border-l-4 border-accent relative overflow-hidden group opacity-0 animate-fade-in"
-        style="animation-delay: 1500ms"
+        :style="{
+          animationDelay: 1500 + (project.sections?.length || 0) * 200 + 'ms',
+        }"
       >
         <!-- Background decorative text -->
         <div
@@ -116,21 +156,58 @@ defineProps({
       </div>
     </div>
 
-    <!-- Lien d'action -->
+    <!-- Actions Footer -->
     <div
-      v-if="project.url && project.url !== '#'"
-      class="mt-12 flex justify-end opacity-0 animate-fade-in"
-      style="animation-delay: 1800ms"
+      class="mt-12 flex flex-col sm:flex-row items-center justify-between gap-6 opacity-0 animate-fade-in"
+      :style="{
+        animationDelay: 1800 + (project.sections?.length || 0) * 200 + 'ms',
+      }"
     >
+      <!-- Bouton Retour -->
+      <button
+        @click="$emit('run-command', 'projets')"
+        class="group/back flex items-center space-x-4 px-6 py-3 border border-accent/20 hover:border-accent/50 bg-accent/5 hover:bg-accent/10 transition-all duration-300 relative overflow-hidden cursor-pointer"
+      >
+        <div
+          class="absolute inset-0 translate-x-[-100%] group-hover/back:translate-x-0 bg-accent/5 transition-transform duration-500 ease-out"
+        ></div>
+        <span
+          class="text-accent group-hover/back:-translate-x-1 transition-transform duration-300"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="m15 18-6-6 6-6" />
+          </svg>
+        </span>
+        <span
+          class="text-accent font-black tracking-[0.3em] term-small uppercase relative z-10"
+        >
+          LISTE DES PROJETS
+        </span>
+      </button>
+
+      <!-- Lien d'action -->
       <a
+        v-if="project.url && project.url !== '#'"
         :href="project.url"
         target="_blank"
-        class="relative group px-8 py-3 bg-accent/10 border border-accent/40 text-accent font-black overflow-hidden transition-all hover:bg-accent hover:text-bg"
+        class="relative group px-8 py-3 bg-accent/10 border border-accent/40 text-accent font-black overflow-hidden transition-all hover:bg-accent hover:text-bg w-full sm:w-auto text-center"
       >
         <div
           class="absolute inset-0 translate-x-[-100%] group-hover:translate-x-0 bg-accent transition-transform duration-300 ease-out -z-10"
         ></div>
-        <div class="flex items-center space-x-3 tracking-[0.2em] text-xs">
+        <div
+          class="flex items-center justify-center space-x-3 tracking-[0.2em] term-small"
+        >
           <span>EXECUTE_LIVE_VIEW</span>
           <span class="group-hover:translate-x-1 transition-transform">-></span>
         </div>

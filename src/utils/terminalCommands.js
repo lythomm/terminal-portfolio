@@ -1,32 +1,187 @@
 import moiImage from "../assets/moi.png";
+import aliciaPreview from "../assets/projects/alicia_preview.png";
 
 export const projectDetails = {
-  bedboat: {
-    name: "BedBoat Platform",
+  aliciaambroise: {
+    name: "aliciaambroise",
+    shortName: "aliciaambroise",
+    year: "2026",
+    shortStack: "HTML / CSS / Vue / Tailwind CSS",
+    listStatus: "EN LIGNE",
     description:
-      "Une plateforme SaaS complète pour la gestion de réservations de bateaux. J'ai piloté l'audit technique et la restructuration globale de l'architecture pour supporter une montée en charge importante.",
-    url: "https://bedboat.fr",
-    tech: ["Vue.js", "Node.js", "PostgreSQL", "Stripe", "Make", "Agile"],
+      "Site vitrine pour une freelance en communication afin de présenter ses services et permettre la prise de rendez-vous.",
+    url: "https://aliciaambroise.vercel.app/",
+    tech: ["HTML", "CSS", "Vue", "Tailwind CSS", "Vite"],
     status: "EN PRODUCTION",
-    role: "Fullstack Architect",
+    role: "Développeur & Designer",
+    sections: [
+      {
+        label: "MISSION",
+        type: "text",
+        content:
+          "Conception et développement d'un site vitrine moderne et épuré pour une freelance en communication. L'objectif était de créer une identité forte tout en restant professionnelle.",
+      },
+      { label: "PREVIEW", type: "image", content: aliciaPreview },
+      {
+        label: "PROBLÈMES",
+        type: "list",
+        content: [
+          "Absence de présence digitale",
+          "Besoin d'un outil de réservation automatisé",
+          "Vitesse de chargement critique pour le SEO",
+        ],
+      },
+      {
+        label: "SOLUTIONS",
+        type: "text",
+        content:
+          "Mise en place d'une architecture Vue 3 performante avec intégration Cal.com et un design système sur mesure.",
+      },
+      {
+        label: "ROLE",
+        type: "text",
+        content: "Développeur Lead & Designer UI/UX",
+      },
+    ],
   },
-  orthophonie: {
-    name: "Assistance Orthophonique",
+  edelstein: {
+    name: "Edelstein",
+    shortName: "Edelstein Lab",
+    year: "2026",
+    shortStack: "HTML / CSS / Vue / Tailwind CSS",
+    listStatus: "EN LIGNE",
     description:
-      "Outil thérapeutique innovant basé sur la sémiophonie. L'application permet aux praticiens de créer des exercices personnalisés et de suivre la progression clinique des patients en temps réel.",
-    url: "#",
-    tech: ["React", "Tailwind CSS", "Vite", "Web Audio API"],
-    status: "DÉPLOYÉ",
-    role: "Frontend Developer",
+      "Site web pour une association de musique techno afin de promouvoir ses événements et permettre la prise de contact.",
+    url: "https://edelstein-lab.vercel.app/",
+    tech: ["HTML", "CSS", "Vue", "Tailwind CSS", "Vite"],
+    status: "EN PRODUCTION",
+    role: "Développeur & Designer",
+    sections: [
+      {
+        label: "DESC",
+        type: "text",
+        content:
+          "Plateforme événementielle pour un collectif techno basé à Paris.",
+      },
+      {
+        label: "CONTEXTE",
+        type: "text",
+        content:
+          "Le collectif Edelstein Lab avait besoin d'une interface reflétant l'esthétique brutaliste et industrielle de leurs événements.",
+      },
+      {
+        label: "FONCTIONNALITÉS",
+        type: "list",
+        content: [
+          "Calendrier des événements",
+          "Système de contact sécurisé",
+          "Player audio intégré (SoundCloud API)",
+        ],
+      },
+      { label: "ROLE", type: "text", content: "Développeur & Designer" },
+      { label: "STATUS", type: "text", content: "EN PRODUCTION" },
+    ],
+  },
+  vendibringuecovoit: {
+    name: "VendibringueCovoit",
+    shortName: "VendibringueCovoit",
+    year: "2026",
+    shortStack: "VUE / Tailwind CSS / Supabase",
+    listStatus: "EN LIGNE",
+    description:
+      "Application mobile permettant de favoriser le covoiturage entre les participants d'un même événement.",
+    url: "https://vendibringue-covoit.vercel.app/",
+    tech: ["VUE", "Tailwind CSS", "Supabase"],
+    status: "EN PRODUCTION",
+    role: "Développeur",
+    sections: [
+      {
+        label: "DESC",
+        type: "text",
+        content:
+          "Solution de covoiturage événementiel pour réduire l'empreinte carbone des festivals.",
+      },
+      {
+        label: "DÉFI",
+        type: "text",
+        content:
+          "Gérer la synchronisation en temps réel des trajets et des places disponibles lors de pics de connexion.",
+      },
+      {
+        label: "STACK",
+        type: "list",
+        content: ["Vue.js 3", "Supabase (Auth/DB/Realtime)", "Tailwind CSS"],
+      },
+      { label: "ROLE", type: "text", content: "Développeur" },
+    ],
+  },
+  shareme: {
+    name: "ShareMe",
+    shortName: "ShareMe",
+    year: "2022",
+    shortStack: "HTML / CSS / React / Tailwind CSS",
+    listStatus: "EN LIGNE",
+    description:
+      "Clone de Pinterest permettant de partager des images et des vidéos.",
+    url: "https://ly-thomas-shareme.vercel.app/search",
+    tech: ["HTML", "CSS", "React", "Tailwind CSS", "Vite", "Sanity.io"],
+    status: "EN PRODUCTION",
+    role: "Développeur",
+    sections: [
+      {
+        label: "CONTEXTE",
+        type: "text",
+        content:
+          "Projet d'études réalisé pour maîtriser les hooks React et l'intégration de CMS headless.",
+      },
+      {
+        label: "TECH_STACK",
+        type: "list",
+        content: [
+          "React (Hooks, Router)",
+          "Sanity CMS (Backend)",
+          "Google OAuth Integration",
+        ],
+      },
+      { label: "ROLE", type: "text", content: "Développeur Fullstack" },
+    ],
   },
   thomas_os: {
     name: "Thomas_OS Portfolio",
+    shortName: "Thomas_OS",
+    year: "2026",
+    shortStack: "Vue 3 / Tailwind CSS v4",
+    listStatus: "CE PROJET",
     description:
-      "Une expérience immersive simulant un système d'exploitation rétro-futuriste. Ce projet explore les limites des interfaces textuelles modernes avec Vue 3 et Tailwind CSS v4.",
+      "Portfolio personnel et expérience immersive simulant un système d'exploitation rétro-futuriste.",
     url: "https://github.com/lythomm/terminal-portfolio",
     tech: ["Vue 3", "Vite", "Tailwind CSS v4", "Framer Motion"],
     status: "VERSION 1.0.0",
-    role: "Lead Developer / Designer",
+    role: "Développeur",
+    sections: [
+      {
+        label: "MISSION",
+        type: "text",
+        content:
+          "Créer un portfolio qui se démarque par son originalité et son interactivité.",
+      },
+      {
+        label: "CONCEPTION",
+        type: "text",
+        content:
+          "Design inspiré par les interfaces CRT des années 80, avec une attention particulière aux micro-interactions et aux effets de distorsion visuelle.",
+      },
+      {
+        label: "ARCHITECTURE",
+        type: "list",
+        content: [
+          "Moteur de terminal custom à base de registres de commandes",
+          "Composants Vue 3 modulaires pour chaque type de réponse",
+          "Animations CSS complexes synchronisées",
+        ],
+      },
+      { label: "STATUS", type: "text", content: "VERSION 1.0.0" },
+    ],
   },
 };
 
@@ -63,7 +218,7 @@ export const commandRegistry = [
     desc: "en savoir plus sur moi",
     handler: () => {
       const bioText =
-        "Développeur Fullstack / App Engineer passionné par la création de solutions techniques innovantes. Basé à Toulouse, je conçois des architectures robustes et des automatisations stratégiques pour transformer des idées complexes en produits scalables.";
+        "Développeur fullstack avec 5 ans d'expérience, je combine une autonomie technique avec un fort esprit d’équipe. Je ne me contente pas de simplement 'coder des fonctionnalités', je recherche des solutions pertinentes et stratégiques pour répondre aux besoins business. Je m’attache à livrer un code propre et évolutif, tout en restant flexible pour m’adapter rapidement aux nouveaux enjeux techniques d'une équipe agile";
 
       return [
         { type: "header", content: "// Dossier Utilisateur : THOMAS" },
@@ -84,27 +239,18 @@ export const commandRegistry = [
     handler: () => [
       { type: "header", content: "// projets sélectionnés" },
       { type: "project-header" },
-      {
+      ...Object.entries(projectDetails).map(([id, p]) => ({
         type: "project",
-        name: "BedBoat",
-        year: "2026",
-        stack: "Vue.js / Node.js / PostgreSQL",
-        status: "EN LIGNE",
-      },
-      {
-        type: "project",
-        name: "Orthophonie",
-        year: "2021",
-        stack: "React / Tailwind CSS",
-        status: "PUBLIÉ",
-      },
-      {
-        type: "project",
-        name: "Thomas_OS",
-        year: "2026",
-        stack: "Vue 3 / Tailwind CSS v4",
-        status: "CE PROJET",
-      },
+        id: id,
+        name: p.shortName,
+        year: p.year,
+        stack: p.shortStack,
+        status: p.listStatus,
+        description: p.description,
+        role: p.role,
+        fullStatus: p.status,
+        sections: p.sections,
+      })),
       {
         type: "text",
         content:
@@ -221,13 +367,13 @@ export const commandRegistry = [
                 bar: 92,
                 status: "STABLE",
               },
-              { name: "React / Next", addr: "0x4C", bar: 85, status: "ACTIVE" },
               {
                 name: "Tailwind CSS",
                 addr: "0x4A",
                 bar: 95,
                 status: "OPTIMIZED",
               },
+              { name: "React / Next", addr: "0x4C", bar: 70, status: "ACTIVE" },
             ],
           },
           {
@@ -240,22 +386,47 @@ export const commandRegistry = [
                 bar: 88,
                 status: "READY",
               },
-              { name: "PostgreSQL", addr: "0x1C", bar: 75, status: "STABLE" },
-              { name: "Supabase", addr: "0x1D", bar: 82, status: "LINKED" },
+              { name: "PostgreSQL", addr: "0x1C", bar: 85, status: "STABLE" },
+              { name: "Supabase", addr: "0x1D", bar: 75, status: "LINKED" },
+              { name: "REST APIs", addr: "0x1E", bar: 90, status: "READY" },
             ],
           },
           {
-            title: "AUTOMATION_UNIT",
+            title: "DEV_METHODS & SOFT_SKILLS",
+            id: "PI-34",
+            skills: [
+              {
+                name: "Méthode agile",
+                addr: "0x8C",
+                bar: 85,
+                status: "OPTIMIZED",
+              },
+              {
+                name: "Résolution de problèmes",
+                addr: "0x8D",
+                bar: 90,
+                status: "READY",
+              },
+              {
+                name: "Communication",
+                addr: "0x8E",
+                bar: 90,
+                status: "ACTIVE",
+              },
+            ],
+          },
+          {
+            title: "TOOLS_SYSTEM",
             id: "AU-99",
             skills: [
               {
-                name: "n8n Workflows",
+                name: "n8n",
                 addr: "0x8C",
                 bar: 95,
                 status: "OPTIMIZED",
               },
-              { name: "Make / Zapier", addr: "0x8D", bar: 85, status: "READY" },
-              { name: "API Logic", addr: "0x8E", bar: 90, status: "ACTIVE" },
+              { name: "Make", addr: "0x8D", bar: 85, status: "READY" },
+              { name: "Notion", addr: "0x8E", bar: 95, status: "ACTIVE" },
             ],
           },
         ],

@@ -33,7 +33,7 @@ defineProps({
 
       <div class="flex flex-col md:flex-row gap-8 relative z-10">
         <div
-          class="shrink-0 opacity-0 animate-pop-in"
+          class="shrink-0 animate-print opacity-0"
           style="animation-delay: 600ms; animation-fill-mode: both"
         >
           <div
@@ -79,7 +79,7 @@ defineProps({
               class="text-dim term-small uppercase tracking-[0.2em] animate-reveal-text"
               style="animation-delay: 500ms; animation-fill-mode: both"
             >
-              Fullstack Architect & App Engineer
+              Développeur Fullstack
             </div>
           </div>
 
@@ -89,7 +89,7 @@ defineProps({
           >
             <div
               v-for="(val, key, idx) in {
-                Origine: 'Toulouse, FR',
+                LOCATION: 'Toulouse, FR',
                 Status: '● ACTIVE_SESSION',
                 XP_LVL: '5.0 YEARS',
                 Lieu: 'Remote_Base',
@@ -199,5 +199,22 @@ defineProps({
 
 .transform-gpu {
   transform: translateZ(0);
+}
+@keyframes print-effect {
+  0% {
+    clip-path: inset(0 0 100% 0);
+    opacity: 0;
+  }
+  1% {
+    opacity: 1;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+}
+
+.animate-print {
+  animation: print-effect 1.5s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 </style>

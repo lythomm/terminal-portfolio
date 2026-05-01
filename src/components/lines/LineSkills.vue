@@ -11,6 +11,7 @@ const getModuleColor = (title) => {
   const t = title.toUpperCase();
   if (t.includes("FRONTEND")) return "cyan";
   if (t.includes("BACKEND")) return "orange";
+  if (t.includes("DEV_METHODS")) return "red";
   return "accent";
 };
 
@@ -42,18 +43,30 @@ const COLOR_MAP = {
     borderDim: "border-accent/10",
     shadow: "rgba(74, 222, 128, 0.5)",
   },
+  red: {
+    bg: "bg-err",
+    bgDim: "bg-err/10",
+    bgTint: "bg-err/5",
+    text: "text-err",
+    border: "border-err",
+    borderDim: "border-err/10",
+    shadow: "rgba(232, 133, 74, 0.5)",
+  },
 };
 
 const getTheme = (title) => COLOR_MAP[getModuleColor(title)];
 </script>
 
 <template>
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
     <div
       v-for="(module, mIdx) in modules"
       :key="mIdx"
       class="border p-5 relative overflow-hidden shadow-[inset_0_0_20px_rgba(0,0,0,0.2)] animate-draw-border"
-      :class="[getTheme(module.title).border + '/40', getTheme(module.title).bgTint]"
+      :class="[
+        getTheme(module.title).border + '/40',
+        getTheme(module.title).bgTint,
+      ]"
       :style="{ animationDelay: mIdx * 500 + 'ms', animationFillMode: 'both' }"
     >
       <!-- Module Header -->

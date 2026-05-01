@@ -78,7 +78,7 @@ onMounted(() => {
         >
           <div class="flex justify-between items-baseline">
             <span
-              class="text-fg font-bold uppercase tracking-tight text-base group-hover/item:text-accent transition-colors"
+              class="text-fg font-bold uppercase tracking-tight text-base group-hover/item:text-orange transition-colors"
             >
               <GlitchText
                 :text="line.name"
@@ -86,7 +86,7 @@ onMounted(() => {
                 :duration="700"
               />
             </span>
-            <span class="text-dim text-sm font-medium tabular-nums">
+            <span class="text-dim term-secondary font-medium tabular-nums">
               <GlitchText
                 :text="line.year"
                 :delay="500 + idx * 100"
@@ -94,22 +94,27 @@ onMounted(() => {
               />
             </span>
           </div>
-          <div class="text-sm text-dim opacity-80 truncate font-medium">
-            <GlitchText
-              :text="line.stack"
-              :delay="600 + idx * 100"
-              :duration="900"
-            />
+          <div class="flex flex-wrap gap-1.5 pt-1">
+            <span
+              v-for="(tech, tIdx) in typeof line.stack === 'string'
+                ? line.stack.split(' / ')
+                : line.stack"
+              :key="tIdx"
+              class="term-small px-2 py-0.5 border border-dim/20 rounded-xs text-dim/80 group-hover/item:border-orange/40 group-hover/item:text-orange/90 transition-all duration-300 font-bold uppercase tracking-wider bg-white/5 animate-pop-in opacity-0"
+              :style="{ animationDelay: 800 + idx * 300 + tIdx * 150 + 'ms' }"
+            >
+              {{ tech }}
+            </span>
           </div>
         </div>
 
         <!-- Contact Item -->
         <div
           v-else-if="line.type === 'contact-row'"
-          class="flex flex-col group/contact py-2"
+          class="flex group/contact py-2"
         >
           <span
-            class="text-dim uppercase tracking-tighter term-label font-bold opacity-70 mb-1"
+            class="w-[100px] text-dim uppercase tracking-tighter term-label font-bold opacity-70 mb-1"
           >
             <GlitchText
               :text="line.label"
