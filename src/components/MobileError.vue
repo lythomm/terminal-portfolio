@@ -8,14 +8,14 @@
   >
     <div class="text-err text-5xl animate-pulse">ERREUR MATÉRIELLE</div>
     <div class="border border-err/30 p-8 bg-err/5 max-w-md">
-      <p class="text-xl mb-4">INCOMPATIBILITÉ DÉTECTÉE</p>
+      <p class="text-xl mb-4 text-err">INCOMPATIBILITÉ DÉTECTÉE</p>
       <p class="dim-text leading-relaxed">
         Le système <span class="accent-text">THOMAS_OS</span> nécessite un
         clavier physique et une résolution d'affichage supérieure pour
         fonctionner correctement.
       </p>
       <div class="h-px bg-err/20 my-6"></div>
-      <p class="text-sm">
+      <p class="text-smt text-dim">
         Pour une expérience optimale, veuillez redémarrer ce terminal sur un
         <span class="text-fg underline underline-offset-4">ordinateur</span>.
       </p>
